@@ -8,4 +8,6 @@ public class Tags : MonoBehaviour {
 	public static string PlanetGravity = "PlanetGravity";
 	public static string Asteroid = "Asteroid";
 	public static string Beam = "Beam";
+	public static string WormholeEnter = "WormholeEnter";
+
 }

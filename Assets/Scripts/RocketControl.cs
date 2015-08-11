@@ -6,6 +6,9 @@ public class RocketControl : MonoBehaviour {
 	private ParticleSystem _boostParticles;
 
 	private Transform _planet;
+	private Wormhole _wormholeEnter;
+	private Wormhole _wormholeExit;
+
 	private Quaternion _rotationBeforeHit;
 
 	private bool _hasCollision = false;
@@ -58,6 +61,13 @@ public class RocketControl : MonoBehaviour {
 			_boostParticles.Stop();
 			StartCoroutine(CollisionVelocity());
 		}
+
+		if(other.GetComponent<Collider>().tag == Tags.WormholeEnter) {
+			_wormholeEnter = other.GetComponent<Wormhole>();
+			_wormholeExit = other.transform.root.GetComponent<Wormhole>();
+			_boostParticles.Stop();
+			StartCoroutine(WormholeEnter());
+		}
 	}
 
 	void OnTriggerExit(Collider other) {
@@ -78,4 +88,29 @@ public class RocketControl : MonoBehaviour {
 		_hasCollision = false;
 		Debug.Log(transform.rotation);
 	}
+
+	IEnumerator WormholeEnter() {
+		GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
+		while(transform.localScale.magnitude > 0.3f) {
+			transform.localScale = Vector3.Lerp(transform.localScale, Vector3.zero, Time.deltaTime * 3);
+			transform.position = Vector3.Lerp(transform.position, _wormholeEnter.transform.position, Time.deltaTime * 3);
+			yield return null;
+		}
+
+		transform.position = _wormholeExit.Destination.transform.position;
+		StartCoroutine(WormholeExit());
+		yield break;
+	}
+
+	IEnumerator WormholeExit() {
+		while(transform.localScale.magnitude < 0.95f) {
+			transform.localScale = Vector3.Lerp(transform.localScale, Vector3.one, Time.deltaTime * 2);
+			yield return null;
+		}
+		
+		transform.localScale = Vector3.one;
+
+		GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezePositionZ;
+	}
+
 }
