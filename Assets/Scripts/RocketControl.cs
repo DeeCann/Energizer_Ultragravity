@@ -8,6 +8,7 @@ public class RocketControl : MonoBehaviour {
 	private Transform _planet;
 	private Wormhole _wormholeEnter;
 	private Wormhole _wormholeExit;
+	private Blackhole _blackHole;
 
 	private Quaternion _rotationBeforeHit;
 
@@ -68,6 +69,12 @@ public class RocketControl : MonoBehaviour {
 			_boostParticles.Stop();
 			StartCoroutine(WormholeEnter());
 		}
+
+		if(other.GetComponent<Collider>().tag == Tags.Blackhole) {
+			_blackHole = other.GetComponent<Blackhole>();
+			_boostParticles.Stop();
+			StartCoroutine(BlackholeEnter());
+		}
 	}
 
 	void OnTriggerExit(Collider other) {
@@ -111,6 +118,17 @@ public class RocketControl : MonoBehaviour {
 		transform.localScale = Vector3.one;
 
 		GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezePositionZ;
+	}
+
+	IEnumerator BlackholeEnter() {
+		GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
+		while(transform.localScale.magnitude > 0.3f) {
+			transform.localScale = Vector3.Lerp(transform.localScale, Vector3.zero, Time.deltaTime * 3);
+			transform.position = Vector3.Lerp(transform.position, _blackHole.transform.position, Time.deltaTime * 3);
+			yield return null;
+		}
+		
+		GameControler.Instance.LevelFailed();
 	}
 
 }
