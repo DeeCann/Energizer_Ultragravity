@@ -15,8 +15,18 @@ public class RocketControl : MonoBehaviour {
 	private bool _hasCollision = false;
 	private bool _isInPlanetGravity = false;
 	private float _planetGravityDistance = 0;
-	
+
+	private GameObject _flowTarget;
+
+	void Start() {
+		_flowTarget = new GameObject();
+		_flowTarget.transform.position = transform.forward + transform.position;
+	}
+
 	void FixedUpdate () {
+		_flowTarget.transform.position = Vector3.Lerp( _flowTarget.transform.position, InputEventHandler._currentTouchPosition, Time.deltaTime * 1.2f);
+
+
 		if(_hasCollision)
 			return;
 
@@ -25,16 +35,19 @@ public class RocketControl : MonoBehaviour {
 
 		if(InputEventHandler._isStartTouchAction)
 		{
-			Quaternion toRotation = Quaternion.LookRotation((InputEventHandler._currentTouchPosition - transform.position));
+
+			if(Vector3.Distance(_flowTarget.transform.position, transform.position) < 0.2f)
+				_flowTarget.transform.position = transform.forward + transform.position;
+
 			if(_isInPlanetGravity)
 				GetComponent<Rigidbody>().velocity = transform.forward * (3 + _planetGravityDistance - Vector3.Distance(transform.position, _planet.position));
 			else
 				GetComponent<Rigidbody>().velocity = transform.forward * 3;
 
-			transform.rotation = Quaternion.Lerp(transform.rotation, toRotation, Time.deltaTime * 1.5f);
-
+			transform.LookAt(_flowTarget.transform);
 			_boostParticles.Play();
 		} else {
+			_flowTarget.transform.position = transform.position;
 			GetComponent<Rigidbody>().velocity = Vector3.Lerp(GetComponent<Rigidbody>().velocity, Vector3.zero, Time.deltaTime);
 			_boostParticles.Stop();
 		}
@@ -46,6 +59,7 @@ public class RocketControl : MonoBehaviour {
 			_rotationBeforeHit = transform.rotation;
 			GetComponent<Rigidbody>().velocity = (other.contacts[0].point - other.collider.transform.position) * 3;
 			_boostParticles.Stop();
+			GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
 			StartCoroutine(CollisionVelocity());
 		}
 	}
@@ -90,8 +104,7 @@ public class RocketControl : MonoBehaviour {
 			transform.rotation = Quaternion.Lerp(transform.rotation, _rotationBeforeHit, Time.deltaTime * 3);
 			yield return null;
 		}
-		GetComponent<Rigidbody>().velocity = Vector3.zero;
-		transform.rotation = _rotationBeforeHit;
+		//GetComponent<Rigidbody>().velocity = Vector3.zero;
 		_hasCollision = false;
 		Debug.Log(transform.rotation);
 	}
