@@ -10,9 +10,11 @@ public class CameraFollow : MonoBehaviour {
 	}
 
 	void FixedUpdate() {
-		Vector3 followPos = new Vector3();
-		followPos = Vector3.Lerp(transform.position, _rocket.transform.position + _rocket.GetComponent<Rigidbody>().velocity, Time.deltaTime * 2);
-		followPos.z = -12;
-		transform.position = followPos;
+		if(!GameControler.Instance.IsLevelFailed) {
+			Vector3 followPos = new Vector3();
+			followPos = Vector3.Lerp(transform.position, _rocket.transform.position + _rocket.GetComponent<Rigidbody>().velocity, Time.deltaTime * 2);
+			followPos.z = -12;
+			transform.position = followPos;
+		}
 	}
 }

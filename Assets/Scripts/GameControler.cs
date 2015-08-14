@@ -4,6 +4,7 @@ using System.Collections;
 public class GameControler : MonoBehaviour {
 	private bool _levelSuccess = false;
 	private bool _levelStarted = false;
+	private bool _levelFailed = false;
 	
 	private int _collisionsCounter = 0;
 	
@@ -34,8 +35,7 @@ public class GameControler : MonoBehaviour {
 		if(Application.loadedLevel == 1)
 			PlayerPrefs.DeleteKey("LastMoleculeSelected");
 		
-		if(Application.loadedLevel > 2 && PlayerPrefs.HasKey("LastMoleculeSelected"))
-			ChangeMolecule(PlayerPrefs.GetString("LastMoleculeSelected"));
+
 		
 //		if(SFXControler.Instance != null)
 //			SFXControler.Instance.VolumeUp();
@@ -75,6 +75,7 @@ public class GameControler : MonoBehaviour {
 	}
 	
 	public void LevelFailed() {
+		IsLevelFailed = true;
 		ReloadLevel();
 	}
 	
@@ -93,6 +94,16 @@ public class GameControler : MonoBehaviour {
 			return _levelStarted;
 		}
 	}
+
+	public bool IsLevelFailed {
+		get {
+			return _levelFailed;
+		}
+		
+		set {
+			_levelFailed = true;
+		}
+	}
 	
 	public int CollisionCounter {
 		set {
@@ -101,16 +112,6 @@ public class GameControler : MonoBehaviour {
 		
 		get {
 			return _collisionsCounter;
-		}
-	}
-	
-	public Transform MyMolecule {
-		set {
-			_myMolecule = value;
-		}
-		
-		get {
-			return _myMolecule;
 		}
 	}
 	
@@ -124,21 +125,6 @@ public class GameControler : MonoBehaviour {
 //				LoadNextLevel();
 //		} else
 //			LoadNextLevel();
-	}
-	
-	public bool ChangeMolecule(string _newMolecule) {
-		if(PlayerPrefs.HasKey(_newMolecule)) {
-			if(MyMolecule == null)
-				MyMolecule = GameObject.FindGameObjectWithTag("Molecule").transform;
-			
-			GameObject newMolecule = (GameObject)Instantiate(Resources.Load("Molecules/"+_newMolecule), MyMolecule.transform.position, Quaternion.identity);
-			newMolecule.transform.localScale = Vector3.one * 0.3f;
-			Destroy(MyMolecule.gameObject);
-			MyMolecule = newMolecule.transform;
-			
-			return true;
-		} else
-			return false;
 	}
 	
 	IEnumerator StartLevel() {

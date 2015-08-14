@@ -5,6 +5,9 @@ public class RocketControl : MonoBehaviour {
 	[SerializeField]
 	private ParticleSystem _boostParticles;
 
+	[SerializeField]
+	private ParticleSystem _collisionParticles;
+
 	private Transform _planet;
 	private Wormhole _wormholeEnter;
 	private Wormhole _wormholeExit;
@@ -16,22 +19,30 @@ public class RocketControl : MonoBehaviour {
 	private bool _isInPlanetGravity = false;
 	private float _planetGravityDistance = 0;
 
+	private float _currentPlanetInstanceID;
+
 	private GameObject _flowTarget;
 
 	void Start() {
 		_flowTarget = new GameObject();
 		_flowTarget.transform.position = transform.forward + transform.position;
+		_boostParticles.startSize = 0;
+		_boostParticles.Play();
 	}
 
 	void FixedUpdate () {
 		_flowTarget.transform.position = Vector3.Lerp( _flowTarget.transform.position, InputEventHandler._currentTouchPosition, Time.deltaTime * 1.2f);
 
-
 		if(_hasCollision)
 			return;
 
-		if(_isInPlanetGravity)
-			GetComponent<Rigidbody>().AddForce( (transform.position - _planet.transform.position) * -(_planetGravityDistance - Vector3.Distance(transform.position, _planet.position)) * _planet.GetComponent<Planet>().GravityMultipler, ForceMode.VelocityChange);
+		if(_isInPlanetGravity) {
+			if(InputEventHandler._isStartTouchAction)
+				GetComponent<Rigidbody>().AddForce( (transform.position - _planet.transform.position) * -(_planetGravityDistance - Vector3.Distance(transform.position, _planet.position)) * _planet.GetComponent<Planet>().GravityMultipler * 0.5f, ForceMode.VelocityChange);
+			else
+				GetComponent<Rigidbody>().AddForce( (transform.position - _planet.transform.position) * -(_planetGravityDistance - Vector3.Distance(transform.position, _planet.position)) * _planet.GetComponent<Planet>().GravityMultipler * 0.03f, ForceMode.VelocityChange);
+
+		}
 
 		if(InputEventHandler._isStartTouchAction)
 		{
@@ -40,32 +51,34 @@ public class RocketControl : MonoBehaviour {
 				_flowTarget.transform.position = transform.forward + transform.position;
 
 			if(_isInPlanetGravity)
-				GetComponent<Rigidbody>().velocity = transform.forward * (3 + _planetGravityDistance - Vector3.Distance(transform.position, _planet.position));
+				GetComponent<Rigidbody>().velocity = transform.forward * (1.5f + _planetGravityDistance - Vector3.Distance(transform.position, _planet.position));
 			else
-				GetComponent<Rigidbody>().velocity = transform.forward * 3;
+				GetComponent<Rigidbody>().velocity = transform.forward * 1.5f;
 
 			transform.LookAt(_flowTarget.transform);
-			_boostParticles.Play();
+			_boostParticles.startSize = 0.2f;
+
 		} else {
 			_flowTarget.transform.position = transform.position;
 			GetComponent<Rigidbody>().velocity = Vector3.Lerp(GetComponent<Rigidbody>().velocity, Vector3.zero, Time.deltaTime);
-			_boostParticles.Stop();
+			_boostParticles.startSize = 0;
 		}
+
 	}
 
 	void OnCollisionEnter(Collision other) {
 		if(other.collider.tag == Tags.Planet) {
-			_hasCollision = true;
-			_rotationBeforeHit = transform.rotation;
-			GetComponent<Rigidbody>().velocity = (other.contacts[0].point - other.collider.transform.position) * 3;
-			_boostParticles.Stop();
-			GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
-			StartCoroutine(CollisionVelocity());
+			_boostParticles.startSize = 0;
+			_collisionParticles.transform.parent = null;
+			_collisionParticles.Emit(100);
+			Destroy(gameObject);
+			GameControler.Instance.LevelFailed();
 		}
 	}
 
 	void OnTriggerEnter(Collider other) {
 		if(other.GetComponent<Collider>().tag == Tags.PlanetGravity) {
+			_currentPlanetInstanceID = other.transform.root.transform.GetInstanceID();
 			_planetGravityDistance = Vector3.Distance(transform.position, other.transform.position);
 			_isInPlanetGravity = true;
 			_planet = other.transform.root.transform;
@@ -73,14 +86,14 @@ public class RocketControl : MonoBehaviour {
 
 		if(other.GetComponent<Collider>().tag == Tags.Asteroid) {
 			_hasCollision = true;
-			_boostParticles.Stop();
+			_boostParticles.startSize = 0;
 			StartCoroutine(CollisionVelocity());
 		}
 
 		if(other.GetComponent<Collider>().tag == Tags.WormholeEnter) {
 			_wormholeEnter = other.GetComponent<Wormhole>();
 			_wormholeExit = other.transform.root.GetComponent<Wormhole>();
-			_boostParticles.Stop();
+			_boostParticles.startSize = 0;
 			StartCoroutine(WormholeEnter());
 		}
 
@@ -93,20 +106,17 @@ public class RocketControl : MonoBehaviour {
 
 	void OnTriggerExit(Collider other) {
 		if(other.GetComponent<Collider>().tag == Tags.PlanetGravity) {
-			_isInPlanetGravity = false;
+			if(_currentPlanetInstanceID == other.transform.root.transform.GetInstanceID())
+				_isInPlanetGravity = false;
 		}
 	}
 
 	IEnumerator CollisionVelocity() {
 		while(GetComponent<Rigidbody>().velocity.magnitude > 1f) {
 			GetComponent<Rigidbody>().velocity = Vector3.Lerp(GetComponent<Rigidbody>().velocity, Vector3.zero, Time.deltaTime);
-
-			transform.rotation = Quaternion.Lerp(transform.rotation, _rotationBeforeHit, Time.deltaTime * 3);
 			yield return null;
 		}
-		//GetComponent<Rigidbody>().velocity = Vector3.zero;
 		_hasCollision = false;
-		Debug.Log(transform.rotation);
 	}
 
 	IEnumerator WormholeEnter() {
