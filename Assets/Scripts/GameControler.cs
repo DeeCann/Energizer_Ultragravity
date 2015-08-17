@@ -6,10 +6,11 @@ public class GameControler : MonoBehaviour {
 	private bool _levelStarted = false;
 	private bool _levelFailed = false;
 	
-	private int _collisionsCounter = 0;
-	
-	private Transform _myMolecule;
-	
+	private int _spaceShipLeft = 0;
+	private int _points = 0;
+
+	private GameObject _spaceShip;
+
 	private static GameControler _instance = null;
 	public static GameControler Instance {
 		get {
@@ -23,20 +24,15 @@ public class GameControler : MonoBehaviour {
 	void Awake() {
 		_levelStarted = false;
 		_instance = this;
-		
-		_collisionsCounter = 0;
+
+		_spaceShip = GameObject.FindGameObjectWithTag("Player");
 	}
 	
 	void Start() {
 		FadeScreen.Instance.StartScene();
 		
 		StartCoroutine(StartLevel());
-		
-		if(Application.loadedLevel == 1)
-			PlayerPrefs.DeleteKey("LastMoleculeSelected");
-		
 
-		
 //		if(SFXControler.Instance != null)
 //			SFXControler.Instance.VolumeUp();
 	}
@@ -78,6 +74,13 @@ public class GameControler : MonoBehaviour {
 		IsLevelFailed = true;
 		ReloadLevel();
 	}
+
+	public void ResetSpaceShip() {
+		if(SpaceshipCounter > 1)
+			CreateNewSpaceShip();
+		else
+			LevelFailed();
+	}
 	
 	public bool IsLevelSuccess {
 		get {
@@ -105,16 +108,39 @@ public class GameControler : MonoBehaviour {
 		}
 	}
 	
-	public int CollisionCounter {
+	public int SpaceshipCounter {
 		set {
-			_collisionsCounter = value;
+			_spaceShipLeft = value;
 		}
 		
 		get {
-			return _collisionsCounter;
+			return _spaceShipLeft;
 		}
 	}
-	
+
+	public int Points {
+		set {
+			_points += value;
+		}
+
+		get {
+			return _points;
+		}
+	}
+
+	public Transform MyRocket {
+		get {
+			return _spaceShip.transform;
+		}
+	}
+
+	private void CreateNewSpaceShip() {
+		_spaceShip = (GameObject)Instantiate(Resources.Load("Rocket"), Vector3.zero, Quaternion.identity);
+		_spaceShip.transform.rotation = Quaternion.AngleAxis(90, Vector3.up);
+
+		SpaceshipCounter = --SpaceshipCounter;
+	}
+
 	private void CheckForUnlockMolecule() {
 //		if(GameManager.Instance.moleculesUnlocLevels.ContainsKey(Application.loadedLevelName)) {
 //			if(!PlayerPrefs.HasKey(GameManager.Instance.moleculesUnlocLevels[Application.loadedLevelName])) {

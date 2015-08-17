@@ -16,7 +16,7 @@ public class Beam : MonoBehaviour {
 	void OnTriggerEnter(Collider other) {
 		if(other.GetComponent<Collider>().tag == Tags.Player) {
 			Destroy(gameObject);
-			Debug.Log("punkt");
+			GameControler.Instance.Points = 1;
 		}
 	}
 }

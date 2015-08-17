@@ -72,7 +72,7 @@ public class RocketControl : MonoBehaviour {
 			_collisionParticles.transform.parent = null;
 			_collisionParticles.Emit(100);
 			Destroy(gameObject);
-			GameControler.Instance.LevelFailed();
+			GameControler.Instance.ResetSpaceShip();
 		}
 	}
 

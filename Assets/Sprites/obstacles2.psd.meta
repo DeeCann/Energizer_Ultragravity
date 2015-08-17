@@ -1,0 +1,308 @@
+fileFormatVersion: 2
+guid: e94a38e5460d24b44bfad07b05599469
+timeCreated: 1435732893
+licenseType: Free
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: RULER-TRIANGULER
+    21300002: END-HOLE
+    21300004: TOP-MENU-BG
+    21300006: ROLLING-BAND-ARROW
+    21300008: MOLECULE-SELECTION
+    21300010: EXIT
+    21300012: RELOAD
+    21300014: CHOOSE-LEVEL
+    21300016: PENCIL-SHORT
+    21300018: BLUE-PENCIL-SHORT
+    21300020: ORANGE-PENCIL-SHORT
+    21300022: PINK-PENCIL-SHORT
+    21300024: GREEN-PENCIL-SHORT
+    21300026: CRAYON-PURPLE
+    21300028: CRAYON-GREEN
+    21300030: CRAYON-ORANGE
+    21300032: CRAYON-BLUE
+    21300034: PENCIL-LONG
+    21300036: PINK-PENCIL_LONG
+    21300038: GREEN-PENCIL_LONG
+    21300040: ORANGE-PENCIL_LONG
+    21300042: BLUE-PENCIL_LONG
+    21300044: GUI-BG1
+  serializedVersion: 2
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    linearTexture: 0
+    correctGamma: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: .25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 0
+  cubemapConvolution: 0
+  cubemapConvolutionSteps: 8
+  cubemapConvolutionExponent: 1.5
+  seamlessCubemap: 0
+  textureFormat: 4
+  maxTextureSize: 1024
+  textureSettings:
+    filterMode: 0
+    aniso: 16
+    mipBias: -1
+    wrapMode: 1
+  nPOTScale: 0
+  lightmap: 0
+  rGBM: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: .5, y: .5}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spritePixelsToUnits: 100
+  alphaIsTransparency: 1
+  textureType: 5
+  buildTargetSettings: []
+  spriteSheet:
+    sprites:
+    - name: RULER-TRIANGULER
+      rect:
+        serializedVersion: 2
+        x: 607
+        y: 337
+        width: 417
+        height: 687
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: END-HOLE
+      rect:
+        serializedVersion: 2
+        x: 307
+        y: 150
+        width: 295
+        height: 295
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: TOP-MENU-BG
+      rect:
+        serializedVersion: 2
+        x: 142
+        y: 0
+        width: 882
+        height: 149
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: ROLLING-BAND-ARROW
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 141
+        height: 143
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 1, w: 0}
+    - name: MOLECULE-SELECTION
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 367
+        width: 177
+        height: 180
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: EXIT
+      rect:
+        serializedVersion: 2
+        x: 5
+        y: 230
+        width: 58
+        height: 51
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: RELOAD
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 284
+        width: 96
+        height: 79
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: CHOOSE-LEVEL
+      rect:
+        serializedVersion: 2
+        x: 103
+        y: 302
+        width: 128
+        height: 60
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: PENCIL-SHORT
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 855
+        width: 36
+        height: 169
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: BLUE-PENCIL-SHORT
+      rect:
+        serializedVersion: 2
+        x: 36
+        y: 855
+        width: 36
+        height: 169
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: ORANGE-PENCIL-SHORT
+      rect:
+        serializedVersion: 2
+        x: 72
+        y: 855
+        width: 36
+        height: 169
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: PINK-PENCIL-SHORT
+      rect:
+        serializedVersion: 2
+        x: 108
+        y: 855
+        width: 36
+        height: 169
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: GREEN-PENCIL-SHORT
+      rect:
+        serializedVersion: 2
+        x: 144
+        y: 855
+        width: 36
+        height: 169
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: CRAYON-PURPLE
+      rect:
+        serializedVersion: 2
+        x: 187
+        y: 730
+        width: 42
+        height: 294
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: CRAYON-GREEN
+      rect:
+        serializedVersion: 2
+        x: 229
+        y: 730
+        width: 42
+        height: 294
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: CRAYON-ORANGE
+      rect:
+        serializedVersion: 2
+        x: 273
+        y: 730
+        width: 42
+        height: 294
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: CRAYON-BLUE
+      rect:
+        serializedVersion: 2
+        x: 317
+        y: 730
+        width: 42
+        height: 294
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: PENCIL-LONG
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 550
+        width: 36
+        height: 305
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: PINK-PENCIL_LONG
+      rect:
+        serializedVersion: 2
+        x: 36
+        y: 550
+        width: 36
+        height: 305
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: GREEN-PENCIL_LONG
+      rect:
+        serializedVersion: 2
+        x: 74
+        y: 550
+        width: 36
+        height: 305
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: ORANGE-PENCIL_LONG
+      rect:
+        serializedVersion: 2
+        x: 112
+        y: 550
+        width: 36
+        height: 305
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: BLUE-PENCIL_LONG
+      rect:
+        serializedVersion: 2
+        x: 148
+        y: 550
+        width: 36
+        height: 305
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: GUI-BG1
+      rect:
+        serializedVersion: 2
+        x: 363
+        y: 446
+        width: 237
+        height: 576
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+  spritePackingTag: 
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

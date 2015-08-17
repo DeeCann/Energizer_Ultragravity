@@ -1,0 +1,213 @@
+fileFormatVersion: 2
+guid: 69652111e0b864cd48576d32b7b33e68
+timeCreated: 1439854177
+licenseType: Pro
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: TopMenuBG
+    21300002: TopMenuBG
+    21300004: Reload
+    21300006: ChooseLevel
+    21300008: Exit
+    21300010: Reload
+    21300012: ChooseLevel
+    21300014: Exit
+    21300016: SpaceShipCounter
+    21300018: EnergyBG
+    21300020: Energy
+    21300022: UnactiveLevel
+    21300024: LevelPack1Active
+    21300026: LevelPack1Unactive
+    21300028: LevelPack2Active
+    21300030: LevelPack2Unactive
+    21300032: LevelPack3Active
+    21300034: LevelPack3Unactive
+  serializedVersion: 2
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    linearTexture: 0
+    correctGamma: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: .25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 0
+  cubemapConvolution: 0
+  cubemapConvolutionSteps: 8
+  cubemapConvolutionExponent: 1.5
+  seamlessCubemap: 0
+  textureFormat: 4
+  maxTextureSize: 2048
+  textureSettings:
+    filterMode: 0
+    aniso: -1
+    mipBias: -1
+    wrapMode: 1
+  nPOTScale: 0
+  lightmap: 0
+  rGBM: 0
+  compressionQuality: 100
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: .5, y: .5}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spritePixelsToUnits: 100
+  alphaIsTransparency: 0
+  textureType: 5
+  buildTargetSettings: []
+  spriteSheet:
+    sprites:
+    - name: TopMenuBG
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1875
+        width: 768
+        height: 173
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Reload
+      rect:
+        serializedVersion: 2
+        x: 768
+        y: 1879
+        width: 156
+        height: 156
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: ChooseLevel
+      rect:
+        serializedVersion: 2
+        x: 976
+        y: 1934
+        width: 126
+        height: 59
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Exit
+      rect:
+        serializedVersion: 2
+        x: 1158
+        y: 1897
+        width: 141
+        height: 134
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: SpaceShipCounter
+      rect:
+        serializedVersion: 2
+        x: 1299
+        y: 1886
+        width: 156
+        height: 156
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: EnergyBG
+      rect:
+        serializedVersion: 2
+        x: 20
+        y: 1786
+        width: 616
+        height: 73
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Energy
+      rect:
+        serializedVersion: 2
+        x: 19
+        y: 1700
+        width: 616
+        height: 73
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: UnactiveLevel
+      rect:
+        serializedVersion: 2
+        x: 1286
+        y: 1685
+        width: 183
+        height: 183
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: LevelPack1Active
+      rect:
+        serializedVersion: 2
+        x: 1475
+        y: 1859
+        width: 183
+        height: 183
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: LevelPack1Unactive
+      rect:
+        serializedVersion: 2
+        x: 1664
+        y: 1859
+        width: 183
+        height: 184
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: LevelPack2Active
+      rect:
+        serializedVersion: 2
+        x: 1475
+        y: 1673
+        width: 183
+        height: 183
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: LevelPack2Unactive
+      rect:
+        serializedVersion: 2
+        x: 1664
+        y: 1673
+        width: 183
+        height: 183
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: LevelPack3Active
+      rect:
+        serializedVersion: 2
+        x: 1475
+        y: 1487
+        width: 183
+        height: 183
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: LevelPack3Unactive
+      rect:
+        serializedVersion: 2
+        x: 1664
+        y: 1487
+        width: 183
+        height: 183
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+  spritePackingTag: 
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

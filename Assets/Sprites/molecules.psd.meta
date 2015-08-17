@@ -1,0 +1,169 @@
+fileFormatVersion: 2
+guid: cadc2705db1694a108c790133c859601
+timeCreated: 1434469520
+licenseType: Free
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: wood-eyes-open
+    21300002: wood-eyes-close
+    21300004: rubber-eyes-open
+    21300006: plastic-eyes-close
+    21300008: plastic-eyes-open
+    21300010: rubber-eyes-close
+    21300012: iron-eyes-open
+    21300014: iron-eyes-close
+    21300016: gerl-eyes-open
+    21300018: gel-eyes-close
+  serializedVersion: 2
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    linearTexture: 0
+    correctGamma: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: .25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 0
+  cubemapConvolution: 0
+  cubemapConvolutionSteps: 8
+  cubemapConvolutionExponent: 1.5
+  seamlessCubemap: 0
+  textureFormat: 33
+  maxTextureSize: 1024
+  textureSettings:
+    filterMode: -1
+    aniso: 0
+    mipBias: -1
+    wrapMode: 1
+  nPOTScale: 0
+  lightmap: 0
+  rGBM: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: .5, y: .5}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spritePixelsToUnits: 100
+  alphaIsTransparency: 1
+  textureType: 5
+  buildTargetSettings:
+  - buildTarget: iPhone
+    maxTextureSize: 1024
+    textureFormat: 33
+    compressionQuality: 50
+  spriteSheet:
+    sprites:
+    - name: wood-eyes-open
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 766
+        width: 258
+        height: 258
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: wood-eyes-close
+      rect:
+        serializedVersion: 2
+        x: 259
+        y: 766
+        width: 258
+        height: 258
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: rubber-eyes-open
+      rect:
+        serializedVersion: 2
+        x: 517
+        y: 766
+        width: 258
+        height: 258
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: plastic-eyes-close
+      rect:
+        serializedVersion: 2
+        x: 517
+        y: 508
+        width: 258
+        height: 258
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: plastic-eyes-open
+      rect:
+        serializedVersion: 2
+        x: 259
+        y: 508
+        width: 258
+        height: 258
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: rubber-eyes-close
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 508
+        width: 258
+        height: 258
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: iron-eyes-open
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 250
+        width: 258
+        height: 258
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: iron-eyes-close
+      rect:
+        serializedVersion: 2
+        x: 259
+        y: 250
+        width: 258
+        height: 258
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: gerl-eyes-open
+      rect:
+        serializedVersion: 2
+        x: 517
+        y: 250
+        width: 258
+        height: 258
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: gel-eyes-close
+      rect:
+        serializedVersion: 2
+        x: 766
+        y: 0
+        width: 258
+        height: 258
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+  spritePackingTag: 
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
