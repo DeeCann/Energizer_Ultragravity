@@ -64,10 +64,10 @@ public class GameControler : MonoBehaviour {
 		if(Application.CanStreamedLevelBeLoaded(nextLevelName))
 			PlayerPrefs.SetInt(Application.loadedLevelName.Substring(0,6)+(System.Convert.ToInt16( Application.loadedLevelName.Substring(6))+1), 1);
 		
-//		if(System.Convert.ToInt16( Application.loadedLevelName.Substring(6)) == 10)
-//			LevelsComplete.Instance.LevelsCompleted();
-//		else
-//			CheckForUnlockMolecule();
+		if(System.Convert.ToInt16( Application.loadedLevelName.Substring(6)) == 10)
+			LevelsComplete.Instance.LevelsCompleted();
+		else
+			LoadNextLevel();
 	}
 	
 	public void LevelFailed() {
@@ -139,18 +139,6 @@ public class GameControler : MonoBehaviour {
 		_spaceShip.transform.rotation = Quaternion.AngleAxis(90, Vector3.up);
 
 		SpaceshipCounter = --SpaceshipCounter;
-	}
-
-	private void CheckForUnlockMolecule() {
-//		if(GameManager.Instance.moleculesUnlocLevels.ContainsKey(Application.loadedLevelName)) {
-//			if(!PlayerPrefs.HasKey(GameManager.Instance.moleculesUnlocLevels[Application.loadedLevelName])) {
-//				PlayerPrefs.SetInt(GameManager.Instance.moleculesUnlocLevels[Application.loadedLevelName], 1);
-//				NewMolecule.Instance.ShowNewMolecule(GameManager.Instance.moleculesUnlocLevels[Application.loadedLevelName]);
-//				StartCoroutine(LoadNextLevelWithTimer(3));
-//			} else 
-//				LoadNextLevel();
-//		} else
-//			LoadNextLevel();
 	}
 	
 	IEnumerator StartLevel() {

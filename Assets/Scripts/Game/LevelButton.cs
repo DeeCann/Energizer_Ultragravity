@@ -11,6 +11,7 @@ public class LevelButton : MonoBehaviour {
 	
 	private GameObject _activeIco;
 	private GameObject _unactiveIco;
+	private GameObject _number;
 
 	private bool _isLocked = true;
 
@@ -20,9 +21,13 @@ public class LevelButton : MonoBehaviour {
 
 			_activeIco = transform.FindChild("ActiveLevel").gameObject;
 			_unactiveIco = transform.FindChild("UnactiveLevel").gameObject;
+			_number = transform.FindChild("Number").gameObject;
 
 			_activeIco.SetActive(true);
 			_unactiveIco.SetActive(false);
+
+			if(LevelName.ToString().Contains("Basic"))
+				_number.GetComponent<Text>().color = new Color(0.118f, 0.094f, 0.345f, 1);
 		}
 	}
 

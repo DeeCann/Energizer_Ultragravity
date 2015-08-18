@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: 69652111e0b864cd48576d32b7b33e68
-timeCreated: 1439854177
+timeCreated: 1439933106
 licenseType: Pro
 TextureImporter:
   fileIDToRecycleName:
@@ -22,6 +22,15 @@ TextureImporter:
     21300030: LevelPack2Unactive
     21300032: LevelPack3Active
     21300034: LevelPack3Unactive
+    21300036: Locker
+    21300038: BonusPack3Text
+    21300040: HUD_0
+    21300042: HUD_1
+    21300044: LevelPack1BG
+    21300046: LevelPack2BG
+    21300048: LevelPack3BG
+    21300050: LevelPackGlowBG
+    21300052: BtnBG
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -204,6 +213,96 @@ TextureImporter:
         y: 1487
         width: 183
         height: 183
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Locker
+      rect:
+        serializedVersion: 2
+        x: 1852
+        y: 1892
+        width: 139
+        height: 129
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: BonusPack3Text
+      rect:
+        serializedVersion: 2
+        x: 1853
+        y: 1734
+        width: 195
+        height: 152
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: HUD_0
+      rect:
+        serializedVersion: 2
+        x: 1853
+        y: 1563
+        width: 195
+        height: 152
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: HUD_1
+      rect:
+        serializedVersion: 2
+        x: 1853
+        y: 1391
+        width: 195
+        height: 152
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: LevelPack1BG
+      rect:
+        serializedVersion: 2
+        x: 1583
+        y: 1218
+        width: 264
+        height: 264
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: LevelPack2BG
+      rect:
+        serializedVersion: 2
+        x: 1583
+        y: 951
+        width: 264
+        height: 264
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: LevelPack3BG
+      rect:
+        serializedVersion: 2
+        x: 1583
+        y: 686
+        width: 264
+        height: 264
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: LevelPackGlowBG
+      rect:
+        serializedVersion: 2
+        x: 1527
+        y: 178
+        width: 380
+        height: 503
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: BtnBG
+      rect:
+        serializedVersion: 2
+        x: 783
+        y: 1690
+        width: 497
+        height: 167
       alignment: 0
       pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
