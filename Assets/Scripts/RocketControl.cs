@@ -7,7 +7,9 @@ public class RocketControl : MonoBehaviour {
 
 	[SerializeField]
 	private ParticleSystem _collisionParticles;
-
+	
+	[SerializeField]
+	private AudioClip _destroySound;
 	private AudioSource _engineSound;
 
 	private Transform _planet;
@@ -17,8 +19,10 @@ public class RocketControl : MonoBehaviour {
 
 	private Quaternion _rotationBeforeHit;
 
+	private bool _hasPlanetCollision = false;
 	private bool _hasCollision = false;
 	private bool _isInPlanetGravity = false;
+	private bool _isRocketHasPulsarVelocity = false;
 	private float _planetGravityDistance = 0;
 
 	private float _currentPlanetInstanceID;
@@ -39,6 +43,11 @@ public class RocketControl : MonoBehaviour {
 
 		if(_hasCollision)
 			return;
+
+		if(_isRocketHasPulsarVelocity) {
+			GetComponent<Rigidbody>().velocity = Vector3.Lerp(GetComponent<Rigidbody>().velocity, Vector3.zero, Time.deltaTime);
+			return;
+		}
 
 		if(_isInPlanetGravity) {
 			if(InputEventHandler._isStartTouchAction)
@@ -79,22 +88,24 @@ public class RocketControl : MonoBehaviour {
 
 	void OnCollisionEnter(Collision other) {
 		if(other.collider.tag == Tags.Planet) {
+			_hasPlanetCollision = true;
+			_engineSound.volume = 0.5f;
+
+			GetComponent<AudioSource>().clip = _destroySound;
+			GetComponent<AudioSource>().Play();
+
 			_boostParticles.startSize = 0;
 			_collisionParticles.transform.parent = null;
 			_collisionParticles.Emit(100);
-			Destroy(gameObject);
+			Destroy(gameObject, 0.4f);
+
+			transform.FindChild("ROCKET").GetComponent<MeshRenderer>().enabled = false;
+
 			GameControler.Instance.ResetSpaceShip();
 		}
 	}
 
 	void OnTriggerEnter(Collider other) {
-		if(other.GetComponent<Collider>().tag == Tags.PlanetGravity) {
-			_currentPlanetInstanceID = other.transform.root.transform.GetInstanceID();
-			_planetGravityDistance = Vector3.Distance(transform.position, other.transform.position);
-			_isInPlanetGravity = true;
-			_planet = other.transform.root.transform;
-		}
-
 		if(other.GetComponent<Collider>().tag == Tags.Asteroid) {
 			_hasCollision = true;
 			_boostParticles.startSize = 0;
@@ -113,12 +124,34 @@ public class RocketControl : MonoBehaviour {
 			_boostParticles.Stop();
 			StartCoroutine(BlackholeEnter());
 		}
+
+		if(other.GetComponent<Collider>().tag == Tags.Pulsar) {
+			if(!_isRocketHasPulsarVelocity) {
+				_isRocketHasPulsarVelocity = true;
+				_blackHole = other.GetComponent<Blackhole>();
+				GetComponent<Rigidbody>().AddForce( transform.forward * (5.5f + Vector3.Distance(transform.position, other.transform.position)), ForceMode.Impulse);
+				StartCoroutine(DisablePulsarVelocity());
+			}
+		}
 	}
 
-	void OnTriggerExit(Collider other) {
-		if(other.GetComponent<Collider>().tag == Tags.PlanetGravity) {
-			if(_currentPlanetInstanceID == other.transform.root.transform.GetInstanceID())
+	public void EnterPlanetGravity(Transform _enteredPlanet) {
+		if(!_isInPlanetGravity) {
+			_currentPlanetInstanceID = _enteredPlanet.GetInstanceID();
+			_planetGravityDistance = Vector3.Distance(transform.position, _enteredPlanet.position);
+			_isInPlanetGravity = true;
+			_planet = _enteredPlanet;
+		}
+	}
+
+	public void ExitPlanetGravity(Transform _exitPlanet) {
+		if(_isInPlanetGravity) {
+			if(_currentPlanetInstanceID == _exitPlanet.GetInstanceID()) {
+				_currentPlanetInstanceID = 0;
+				_planetGravityDistance = 0;
 				_isInPlanetGravity = false;
+				_planet = null;
+			}
 		}
 	}
 
@@ -162,7 +195,7 @@ public class RocketControl : MonoBehaviour {
 			yield return null;
 		}
 		
-		GameControler.Instance.LevelFailed();
+		GameControler.Instance.ResetSpaceShip();
 	}
 
 	IEnumerator EngineSoundOn() {
@@ -183,7 +216,7 @@ public class RocketControl : MonoBehaviour {
 		while(_engineSound.volume > 0.1f) {
 			_engineSound.volume = Mathf.Lerp(_engineSound.volume, 0, Time.deltaTime * 3);
 
-			if( InputEventHandler._isStartTouchAction )
+			if( InputEventHandler._isStartTouchAction || _hasPlanetCollision)
 				yield break;
 			yield return null;
 
@@ -193,6 +226,12 @@ public class RocketControl : MonoBehaviour {
 		_engineSound.Stop();
 
 		yield break;
+	}
+
+	IEnumerator DisablePulsarVelocity() {
+		yield return new WaitForSeconds(2);
+
+		_isRocketHasPulsarVelocity = false;
 	}
 
 }
