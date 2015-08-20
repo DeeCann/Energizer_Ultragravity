@@ -8,6 +8,8 @@ public class RocketControl : MonoBehaviour {
 	[SerializeField]
 	private ParticleSystem _collisionParticles;
 
+	private AudioSource _engineSound;
+
 	private Transform _planet;
 	private Wormhole _wormholeEnter;
 	private Wormhole _wormholeExit;
@@ -24,6 +26,8 @@ public class RocketControl : MonoBehaviour {
 	private GameObject _flowTarget;
 
 	void Start() {
+		_engineSound = GetComponent<AudioSource>();
+
 		_flowTarget = new GameObject();
 		_flowTarget.transform.position = transform.forward + transform.position;
 		_boostParticles.startSize = 0;
@@ -38,9 +42,9 @@ public class RocketControl : MonoBehaviour {
 
 		if(_isInPlanetGravity) {
 			if(InputEventHandler._isStartTouchAction)
-				GetComponent<Rigidbody>().AddForce( (transform.position - _planet.transform.position) * -(_planetGravityDistance - Vector3.Distance(transform.position, _planet.position)) * _planet.GetComponent<Planet>().GravityMultipler * 0.5f, ForceMode.VelocityChange);
+				GetComponent<Rigidbody>().AddForce( (transform.position - _planet.transform.position) * -(_planetGravityDistance - Vector3.Distance(transform.position, _planet.position)) * _planet.GetComponent<Planet>().GravityMultipler, ForceMode.VelocityChange);
 			else
-				GetComponent<Rigidbody>().AddForce( (transform.position - _planet.transform.position) * -(_planetGravityDistance - Vector3.Distance(transform.position, _planet.position)) * _planet.GetComponent<Planet>().GravityMultipler * 0.03f, ForceMode.VelocityChange);
+				GetComponent<Rigidbody>().AddForce( (transform.position - _planet.transform.position) * -(_planetGravityDistance - Vector3.Distance(transform.position, _planet.position)) * _planet.GetComponent<Planet>().GravityMultipler * 0.01f, ForceMode.VelocityChange);
 
 		}
 
@@ -58,10 +62,17 @@ public class RocketControl : MonoBehaviour {
 			transform.LookAt(_flowTarget.transform);
 			_boostParticles.startSize = 0.2f;
 
+			if(!_engineSound.isPlaying) {
+				_engineSound.Play();
+				StartCoroutine(EngineSoundOn());
+			}
+
 		} else {
 			_flowTarget.transform.position = transform.position;
 			GetComponent<Rigidbody>().velocity = Vector3.Lerp(GetComponent<Rigidbody>().velocity, Vector3.zero, Time.deltaTime);
 			_boostParticles.startSize = 0;
+
+			StartCoroutine(EngineSoundOff());
 		}
 
 	}
@@ -152,6 +163,36 @@ public class RocketControl : MonoBehaviour {
 		}
 		
 		GameControler.Instance.LevelFailed();
+	}
+
+	IEnumerator EngineSoundOn() {
+		while(_engineSound.volume < 0.45f) {
+			_engineSound.volume = Mathf.Lerp(_engineSound.volume, 0.5f, Time.deltaTime * 2);
+
+			if( !InputEventHandler._isStartTouchAction )
+				yield break;
+			yield return null;
+		}
+
+		_engineSound.volume = 0.5f;
+		yield break;
+
+	}
+
+	IEnumerator EngineSoundOff() {
+		while(_engineSound.volume > 0.1f) {
+			_engineSound.volume = Mathf.Lerp(_engineSound.volume, 0, Time.deltaTime * 3);
+
+			if( InputEventHandler._isStartTouchAction )
+				yield break;
+			yield return null;
+
+		}
+		
+		_engineSound.volume = 0;
+		_engineSound.Stop();
+
+		yield break;
 	}
 
 }
