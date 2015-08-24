@@ -27,18 +27,37 @@ public class InputEventHandler : MonoBehaviour {
 		}
 
 		if(_isStartTouchAction) {
-			Ray ray = Camera.main.ScreenPointToRay (Input.mousePosition);
-			RaycastHit hit;
-			
-			if (Physics.Raycast (ray, out hit, Mathf.Infinity))
-			{
-				_UIHit = false;	
-				_currentTouchPosition = new Vector3(hit.point.x, hit.point.y, 0);
+//			Ray ray = Camera.main.ScreenPointToRay (Input.mousePosition);
+//			RaycastHit hit;
+//			
+//			if (Physics.Raycast (ray, out hit, Mathf.Infinity))
+//			{
+//				_UIHit = false;	
+//				_currentTouchPosition = new Vector3(0, hit.point.y, hit.point.z);
+//			}
+//			_currentTouchPosition.x = 0;
+//			_currentTouchPosition = Camera.main.ScreenToWorldPoint (Input.mousePosition);
+//			_currentTouchPosition.x = 0;
+//			Debug.Log(_currentTouchPosition);
+
+
+
+
+			Plane plane=new Plane(Vector3.right, Vector3.zero);
+			Ray ray=Camera.main.ScreenPointToRay(Input.mousePosition);
+			float distance;
+			if(plane.Raycast(ray, out distance)) {
+				_currentTouchPosition=ray.GetPoint(distance);
+				//Instantiate (obj, point, Quaternion.identity);
 			}
-			_currentTouchPosition.z = 0;
+
 		}
 
 		if(Input.GetMouseButtonUp(0))
 			_isStartTouchAction = false;
+	}
+
+	public static void ResetInput() {
+		_isStartTouchAction = false;
 	}
 }
