@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
+using Soomla.Store;
 
 public class UnlockAllLevelsPanel : MonoBehaviour {
 
@@ -18,10 +20,18 @@ public class UnlockAllLevelsPanel : MonoBehaviour {
 			return _instance;
 		}
 	}
-	
+
+	public static List<VirtualGood> LifeVGItems = null;
+
 	void Awake() {
 		_instance = this;
 	}
+
+	void Start() {
+		StoreEvents.OnSoomlaStoreInitialized += OnSoomlaStoreInitialized;
+		SoomlaStore.Initialize(new BuyPacksAsset());
+	}
+
 
 	public void BuyNewLevels() {
 		StartCoroutine(FadeOutCanvas(_mainUnlockLevelsPanel.GetComponent<CanvasGroup>()));
@@ -45,6 +55,16 @@ public class UnlockAllLevelsPanel : MonoBehaviour {
 		PlayerPrefs.SetInt("LevelPacksUnlocked", 1);
 		PlayerPrefs.SetInt("Pack1_11", 1);
 		PlayerPrefs.SetInt("Pack2_26", 1);
+	}
+
+	public void InitializeBuyItem() {
+		VirtualGood Premium_Packs = LifeVGItems[0];
+
+		try {
+			StoreInventory.BuyItem(Premium_Packs.ItemId);
+		} catch(UnityException e) {
+			Debug.Log("SOOMLA/UNITY" + e.Message);
+		}
 	}
 
 	public void SuccessBuyUnlockPanel() {
@@ -74,4 +94,15 @@ public class UnlockAllLevelsPanel : MonoBehaviour {
 		_canvas.alpha = 1;
 		_canvas.blocksRaycasts = true;
 	}
+
+
+
+
+
+
+
+	public void OnSoomlaStoreInitialized() {
+		LifeVGItems = StoreInfo.Goods;
+	}
+
 }

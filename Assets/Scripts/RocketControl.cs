@@ -38,6 +38,7 @@ public class RocketControl : MonoBehaviour {
 
 		if(_isRocketHasPulsarVelocity) {
 			GetComponent<Rigidbody>().velocity = Vector3.Lerp(GetComponent<Rigidbody>().velocity, Vector3.zero, Time.deltaTime);
+			transform.position = new Vector3(0, transform.position.y, transform.position.z);
 			return;
 		}
 
@@ -97,6 +98,7 @@ public class RocketControl : MonoBehaviour {
 			_wormholeEnter = other.GetComponent<Wormhole>();
 			_wormholeExit = other.transform.root.GetComponent<Wormhole>();
 			_boostParticles.startSize = 0;
+			GetComponent<CapsuleCollider>().enabled = false;
 			StartCoroutine(WormholeEnter());
 		}
 
@@ -181,9 +183,11 @@ public class RocketControl : MonoBehaviour {
 		while(transform.localScale.magnitude < 1.7f) {
 			GetComponent<Rigidbody>().velocity = Vector3.Lerp(GetComponent<Rigidbody>().velocity, transform.forward * 2f, Time.deltaTime);
 			transform.localScale = Vector3.Lerp(transform.localScale, Vector3.one, Time.deltaTime * 3);
+			transform.rotation = Quaternion.LookRotation(Vector3.forward);
 			yield return null;
 		}
 
+		GetComponent<CapsuleCollider>().enabled = true;
 		GetComponent<Rigidbody>().velocity = transform.forward * 2f;
 		_hasWormhole = false;
 		transform.localScale = Vector3.one;
