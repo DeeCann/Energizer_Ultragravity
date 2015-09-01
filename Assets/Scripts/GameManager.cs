@@ -63,6 +63,8 @@ public class GameManager : MonoBehaviour {
 		Pack3_55
 	}
 
+
+
 	private static GameManager _instance = null;
 	public static GameManager Instance {
 		get {

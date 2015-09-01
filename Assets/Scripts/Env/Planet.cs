@@ -16,11 +16,11 @@ public class Planet : MonoBehaviour {
 
 	void Start() {
 		_rocket = GameObject.FindGameObjectWithTag(Tags.Player).transform;
-		_gravityRadius = (GetComponent<SphereCollider>().radius + transform.FindChild("PlanetGravity").GetComponent<SphereCollider>().radius);
+		_gravityRadius = (transform.FindChild("PlanetGravity").GetComponent<SphereCollider>().radius);
 	}
 
 	void FixedUpdate() {
-		transform.RotateAround(transform.position, Vector3.up, _rotationSpeed);
+		transform.RotateAround(transform.position, transform.up, _rotationSpeed);
 
 		if(_rocket == null)
 			_rocket = GameControler.Instance.MyRocket.transform;

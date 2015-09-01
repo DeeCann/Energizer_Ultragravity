@@ -76,6 +76,7 @@ public class GameControler : MonoBehaviour {
 	}
 
 	public void ResetSpaceShip() {
+		InputEventHandler.ResetInput();
 		if(SpaceshipCounter > 1)
 			CreateNewSpaceShip();
 		else
@@ -136,9 +137,10 @@ public class GameControler : MonoBehaviour {
 
 	private void CreateNewSpaceShip() {
 		_spaceShip = (GameObject)Instantiate(Resources.Load("Rocket"), Vector3.zero, Quaternion.identity);
-		_spaceShip.transform.rotation = Quaternion.AngleAxis(90, Vector3.up);
-
+		_spaceShip.GetComponent<Rigidbody>().velocity = Vector3.zero;	
 		SpaceshipCounter = --SpaceshipCounter;
+
+		ShipEnergy.Instance.ResetEnergy();
 	}
 	
 	IEnumerator StartLevel() {
