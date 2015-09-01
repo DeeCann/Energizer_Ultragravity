@@ -172,11 +172,7 @@ namespace Soomla.Store
         /// </summary>
         /// <param name="category">Category we want to check</param>
         /// <returns>EquippableVG otherwise null</returns>
-<<<<<<< HEAD
 	    public static EquippableVG GetEquippedVirtualGood(VirtualCategory category){
-=======
-	    public static EquippableVG GetEquippedVirtualGood(VirtualCategory category){
->>>>>>> bartek-dev
             SoomlaUtils.LogDebug(TAG, "Checking equipped goood in " + category.Name + " category");
 
 	        foreach (string goodItemId in category.GoodItemIds)
@@ -187,11 +183,7 @@ namespace Soomla.Store
                     VirtualGoodsStorage.IsEquipped(good) &&
 	                StoreInfo.GetCategoryForVirtualGood(goodItemId) == category)
 	                return good;
-<<<<<<< HEAD
 	        }
-=======
-	        }
->>>>>>> bartek-dev
             SoomlaUtils.LogError(TAG, "There is no virtual good equipped in " + category.Name + " category");
 	        return null;
 	    }
