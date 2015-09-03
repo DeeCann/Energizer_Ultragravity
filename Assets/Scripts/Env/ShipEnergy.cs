@@ -33,7 +33,7 @@ public class ShipEnergy : MonoBehaviour {
 			_maxEnergyValue = _maxEnergyValue - 0.5f;
 			Vector2 _newSize = new Vector2(_maxEnergyValue, GetComponent<RectTransform>().sizeDelta.y);
 			GetComponent<RectTransform>().sizeDelta = _newSize;
-			Debug.Log(_maxEnergyValue);
+			//Debug.Log(_maxEnergyValue);
 			if(_maxEnergyValue <= 0 && !_shipDestroied) {
 				_shipDestroied = true;
 				GameControler.Instance.MyRocket.GetComponent<RocketControl>().DestroyShip();

@@ -38,10 +38,15 @@ public class RocketControl : MonoBehaviour {
 			return;
 
 		if(_isRocketHasPulsarVelocity) {
-			GetComponent<Rigidbody>().velocity = Vector3.Lerp(GetComponent<Rigidbody>().velocity, Vector3.zero, Time.deltaTime);
-			transform.position = new Vector3(0, transform.position.y, transform.position.z);
+			GetComponent<Rigidbody>().velocity = Vector3.Lerp(GetComponent<Rigidbody>().velocity, transform.forward * 3f, Time.deltaTime);
+
+			Vector3 pos = InputEventHandler._currentTouchPosition-transform.position;
+			var newRot = Quaternion.LookRotation(pos);
+
+			transform.rotation = Quaternion.Lerp(transform.rotation, newRot, Time.deltaTime * 2);
+			transform.position = new Vector3(0, Mathf.Clamp(transform.position.y, -17, 17), transform.position.z);
 			return;
-		}
+		} 
 
 		GetComponent<Rigidbody>().velocity = transform.forward * 3f;
 		_boostParticles.startSize = 0.2f;
@@ -114,8 +119,9 @@ public class RocketControl : MonoBehaviour {
 		if(other.GetComponent<Collider>().tag == Tags.Pulsar) {
 			if(!_isRocketHasPulsarVelocity) {
 				_isRocketHasPulsarVelocity = true;
-				_blackHole = other.GetComponent<Blackhole>();
-				GetComponent<Rigidbody>().AddForce( transform.forward * (10.5f + Vector3.Distance(transform.position, other.transform.position)), ForceMode.Impulse);
+				//GetComponent<Rigidbody>().AddForce( transform.forward * (10.5f + Vector3.Distance(transform.position, other.transform.position)), ForceMode.Impulse);
+				GetComponent<Rigidbody>().velocity = transform.forward * 10;
+
 				StartCoroutine(DisablePulsarVelocity());
 			}
 		}
@@ -185,7 +191,7 @@ public class RocketControl : MonoBehaviour {
 		while(transform.position.z < _wormholeExit.Destination.transform.position.z) {
 			GetComponent<Rigidbody>().velocity += (_wormholeExit.Destination.transform.position - transform.position).normalized * 0.2f;
 			transform.localScale = Vector3.Lerp(transform.localScale, Vector3.zero, Time.deltaTime * 5);
-			transform.position = Vector3.MoveTowards(transform.position, _wormholeExit.Destination.transform.position, Time.deltaTime * 0.1f);
+			transform.position = Vector3.MoveTowards(transform.position, _wormholeExit.Destination.transform.position, Time.deltaTime * 10.5f);
 
 			yield return null;
 		}
@@ -198,7 +204,7 @@ public class RocketControl : MonoBehaviour {
 	IEnumerator WormholeExit() {
 		GetComponent<CapsuleCollider>().enabled = true;
 		while(transform.localScale.magnitude < 1.7f) {
-			GetComponent<Rigidbody>().velocity = Vector3.Lerp(GetComponent<Rigidbody>().velocity, transform.forward * 2f, Time.deltaTime);
+			GetComponent<Rigidbody>().velocity = Vector3.Lerp(GetComponent<Rigidbody>().velocity, transform.forward * 3f, Time.deltaTime * 10);
 			transform.localScale = Vector3.Lerp(transform.localScale, Vector3.one, Time.deltaTime * 3);
 			transform.rotation = Quaternion.LookRotation(Vector3.forward);
 			yield return null;
