@@ -22,13 +22,15 @@ public class Planet : MonoBehaviour {
 	void FixedUpdate() {
 		transform.RotateAround(transform.position, transform.up, _rotationSpeed);
 
-		if(_rocket == null)
+		if(_rocket == null && GameControler.Instance.MyRocket != null)
 			_rocket = GameControler.Instance.MyRocket.transform;
 
-		if(_gravityRadius > Vector3.Distance(transform.position, _rocket.position))
-			_rocket.GetComponent<RocketControl>().EnterPlanetGravity(transform);
-		else
-			_rocket.GetComponent<RocketControl>().ExitPlanetGravity(transform);
+		if(_rocket) {
+			if(_gravityRadius > Vector3.Distance(transform.position, _rocket.position))
+				_rocket.GetComponent<RocketControl>().EnterPlanetGravity(transform);
+			else
+				_rocket.GetComponent<RocketControl>().ExitPlanetGravity(transform);
+		}
 	}
 
 	public float GravityMultipler {

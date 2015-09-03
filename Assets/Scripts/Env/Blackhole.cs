@@ -6,6 +6,8 @@ public class Blackhole : MonoBehaviour {
 		if(other.GetComponent<Collider>().tag == Tags.Player) {
 			GetComponent<AudioSource>().Play();
 			StartCoroutine(FallOff());
+
+			Destroy(other.gameObject, 2);
 		}
 	}
 

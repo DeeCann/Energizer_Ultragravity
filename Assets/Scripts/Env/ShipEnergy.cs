@@ -8,6 +8,7 @@ public class ShipEnergy : MonoBehaviour {
 	private float _newEnergyLevel;
 
 	private bool _isIncreasingEnergy = false;
+	private bool _shipDestroied = false;
 
 	private static ShipEnergy _instance = null;
 	public static ShipEnergy Instance {
@@ -24,19 +25,23 @@ public class ShipEnergy : MonoBehaviour {
 		_maxEnergyValue = 620;
 		_newEnergyLevel = 0;
 		_isIncreasingEnergy = false;
+		_shipDestroied = false;
 	}
 
 	void Update () {
-//		if(InputEventHandler._isStartTouchAction && !_isIncreasingEnergy) {
-//			Vector2 _newSize = new Vector2(--_maxEnergyValue, GetComponent<RectTransform>().sizeDelta.y);
-//			GetComponent<RectTransform>().sizeDelta = _newSize;
-//
-//			if(_maxEnergyValue <= 0)
-//				GameObject.FindGameObjectWithTag("Player").GetComponent<RocketControl>().DestroyShip();
-//
-//			Vector2 _newPosition = new Vector2(((620 - _maxEnergyValue) * 17) / 620, GetComponent<RectTransform>().anchorMax.y);
-//			GetComponent<RectTransform>().anchoredPosition = _newPosition;
-//		}
+		if(!_isIncreasingEnergy ) {
+			_maxEnergyValue = _maxEnergyValue - 0.5f;
+			Vector2 _newSize = new Vector2(_maxEnergyValue, GetComponent<RectTransform>().sizeDelta.y);
+			GetComponent<RectTransform>().sizeDelta = _newSize;
+
+			if(_maxEnergyValue <= 0 && !_shipDestroied) {
+				_shipDestroied = true;
+				GameControler.Instance.MyRocket.GetComponent<RocketControl>().DestroyShip();
+			}
+
+			Vector2 _newPosition = new Vector2(((620 - _maxEnergyValue) * 17) / 620, GetComponent<RectTransform>().anchorMax.y);
+			GetComponent<RectTransform>().anchoredPosition = _newPosition;
+		}
 	}
 
 	public float GetEnergy {
@@ -55,6 +60,7 @@ public class ShipEnergy : MonoBehaviour {
 		_maxEnergyValue = 620;
 		_newEnergyLevel = 0;
 		_isIncreasingEnergy = false;
+		_shipDestroied = false;
 	}
 
 	IEnumerator IncreaseEnergy() {

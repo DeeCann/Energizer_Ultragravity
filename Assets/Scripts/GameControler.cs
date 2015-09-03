@@ -76,11 +76,7 @@ public class GameControler : MonoBehaviour {
 	}
 
 	public void ResetSpaceShip() {
-		InputEventHandler.ResetInput();
-		if(SpaceshipCounter > 1)
-			CreateNewSpaceShip();
-		else
-			LevelFailed();
+		StartCoroutine(ResetSpaceShipAfterTime());
 	}
 	
 	public bool IsLevelSuccess {
@@ -131,12 +127,15 @@ public class GameControler : MonoBehaviour {
 
 	public Transform MyRocket {
 		get {
-			return _spaceShip.transform;
+			if(_spaceShip != null)
+				return _spaceShip.transform;
+			else
+				return null;
 		}
 	}
 
 	private void CreateNewSpaceShip() {
-		_spaceShip = (GameObject)Instantiate(Resources.Load("Rocket"), Vector3.zero, Quaternion.identity);
+		_spaceShip = (GameObject)Instantiate(Resources.Load("Rocket"), new Vector3(0,0,0), Quaternion.identity);
 		_spaceShip.GetComponent<Rigidbody>().velocity = Vector3.zero;	
 		SpaceshipCounter = --SpaceshipCounter;
 
@@ -159,5 +158,19 @@ public class GameControler : MonoBehaviour {
 		yield return new WaitForSeconds(_timer);
 		//SFXControler.Instance.VolumeUp();
 		LoadNextLevel();
+	}
+
+	
+	IEnumerator ResetSpaceShipAfterTime() {
+		
+		yield return new WaitForSeconds(2);
+
+		InputEventHandler.ResetInput();
+		if(SpaceshipCounter > 1)
+			CreateNewSpaceShip();
+		else
+			LevelFailed();
+		
+		
 	}
 }

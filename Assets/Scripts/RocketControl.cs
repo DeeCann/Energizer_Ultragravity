@@ -20,6 +20,7 @@ public class RocketControl : MonoBehaviour {
 	private bool _hasPlanetCollision = false;
 	private bool _hasCollision = false;
 	private bool _hasWormhole = false;
+	private bool _hasBlackhole = false;
 	private bool _isInPlanetGravity = false;
 	private bool _isRocketHasPulsarVelocity = false;
 	private float _planetGravityDistance = 0;
@@ -42,7 +43,7 @@ public class RocketControl : MonoBehaviour {
 			return;
 		}
 
-		GetComponent<Rigidbody>().velocity = transform.forward * 2f;
+		GetComponent<Rigidbody>().velocity = transform.forward * 3f;
 		_boostParticles.startSize = 0.2f;
 
 		if(!_engineSound.isPlaying) {
@@ -76,7 +77,7 @@ public class RocketControl : MonoBehaviour {
 			} else
 				transform.LookAt(transform.position + transform.forward);
 		}
-		transform.position = new Vector3(0, transform.position.y, transform.position.z);
+		transform.position = new Vector3(0, Mathf.Clamp(transform.position.y, -17, 17), transform.position.z);
 	}
 
 	void OnCollisionEnter(Collision other) {
@@ -105,6 +106,8 @@ public class RocketControl : MonoBehaviour {
 		if(other.GetComponent<Collider>().tag == Tags.Blackhole) {
 			_blackHole = other.GetComponent<Blackhole>();
 			_boostParticles.Stop();
+			_hasBlackhole = true;
+			StartCoroutine(EngineSoundOff());
 			StartCoroutine(BlackholeEnter());
 		}
 
@@ -141,10 +144,11 @@ public class RocketControl : MonoBehaviour {
 	public void DestroyShip() {
 		_hasPlanetCollision = true;
 		_engineSound.volume = 0.5f;
-		
+
 		GetComponent<AudioSource>().clip = _destroySound;
-		GetComponent<AudioSource>().Play();
-		
+		if(!GetComponent<AudioSource>().isPlaying)
+			GetComponent<AudioSource>().Play();
+
 		_boostParticles.startSize = 0;
 		_collisionParticles.transform.parent = null;
 		_collisionParticles.Emit(100);
@@ -154,6 +158,7 @@ public class RocketControl : MonoBehaviour {
 		
 		GameControler.Instance.ResetSpaceShip();
 	}
+
 
 	IEnumerator CollisionVelocity() {
 
@@ -180,6 +185,7 @@ public class RocketControl : MonoBehaviour {
 	}
 
 	IEnumerator WormholeExit() {
+		GetComponent<CapsuleCollider>().enabled = true;
 		while(transform.localScale.magnitude < 1.7f) {
 			GetComponent<Rigidbody>().velocity = Vector3.Lerp(GetComponent<Rigidbody>().velocity, transform.forward * 2f, Time.deltaTime);
 			transform.localScale = Vector3.Lerp(transform.localScale, Vector3.one, Time.deltaTime * 3);
@@ -187,7 +193,7 @@ public class RocketControl : MonoBehaviour {
 			yield return null;
 		}
 
-		GetComponent<CapsuleCollider>().enabled = true;
+
 		GetComponent<Rigidbody>().velocity = transform.forward * 2f;
 		_hasWormhole = false;
 		transform.localScale = Vector3.one;
@@ -205,24 +211,24 @@ public class RocketControl : MonoBehaviour {
 	}
 
 	IEnumerator EngineSoundOn() {
-		while(_engineSound.volume < 0.45f) {
-			_engineSound.volume = Mathf.Lerp(_engineSound.volume, 0.5f, Time.deltaTime * 2);
+		while(_engineSound.volume < 0.02f) {
+			_engineSound.volume = Mathf.Lerp(_engineSound.volume, 0.02f, Time.deltaTime * 5);
 
 			if( !InputEventHandler._isStartTouchAction || _hasCollision)
 				yield break;
 			yield return null;
 		}
 
-		_engineSound.volume = 0.5f;
+		_engineSound.volume = 0.02f;
 		yield break;
 
 	}
 
 	IEnumerator EngineSoundOff() {
-		while(_engineSound.volume > 0.1f) {
-			_engineSound.volume = Mathf.Lerp(_engineSound.volume, 0, Time.deltaTime * 3);
+		while(_engineSound.volume > 0.01f) {
+			_engineSound.volume = Mathf.Lerp(_engineSound.volume, 0, Time.deltaTime * 5);
 
-			if(!_hasCollision)
+			if(!_hasCollision && !_hasBlackhole)
 				if( InputEventHandler._isStartTouchAction || _hasPlanetCollision )
 					yield break;
 			yield return null;
