@@ -62,7 +62,7 @@ public class RocketControl : MonoBehaviour {
 				GetComponent<Rigidbody>().velocity += transform.forward * -(_planetGravityDistance - Vector3.Distance(transform.position, _planet.position) * 20) * _gravityPositionMultipier;
 			}
 
-			transform.rotation = Quaternion.Lerp(transform.rotation, newRot, Time.deltaTime);
+			transform.rotation = Quaternion.Lerp(transform.rotation, newRot, Time.deltaTime * 2);
 		} else {
 			if(_isInPlanetGravity) {
 				float _gravityPositionMultipier = (_planetGravityDistance - Vector3.Distance(transform.position, _planet.position))/_planet.GetComponent<Planet>().GravityMultipler * 0.001f;
@@ -73,7 +73,7 @@ public class RocketControl : MonoBehaviour {
 				Vector3 pos = _planet.transform.position-transform.position;
 				var newRot = Quaternion.LookRotation(pos);
 
-				transform.rotation = Quaternion.Lerp(transform.rotation, newRot, Time.deltaTime );
+				transform.rotation = Quaternion.Lerp(transform.rotation, newRot, Time.deltaTime * 0.5f);
 			} else
 				transform.LookAt(transform.position + transform.forward);
 		}
@@ -122,23 +122,34 @@ public class RocketControl : MonoBehaviour {
 	}
 
 	public void EnterPlanetGravity(Transform _enteredPlanet) {
-		if(!_isInPlanetGravity) {
+		//if(!_isInPlanetGravity) {
+			//Debug.Log("ENTER: " + _enteredPlanet.GetInstanceID());
 			_currentPlanetInstanceID = _enteredPlanet.GetInstanceID();
 			_planetGravityDistance = Vector3.Distance(transform.position, _enteredPlanet.position);
+			//Debug.Log(_planetGravityDistance);
 			_isInPlanetGravity = true;
 			_planet = _enteredPlanet;
-		}
+		//}
+	}
+
+	public bool IsCurrentGravityPlanet(Transform _currentPlanet) {
+		//Debug.Log(_currentPlanetInstanceID + " - " + _currentPlanet.GetInstanceID());
+		if(_currentPlanetInstanceID == _currentPlanet.GetInstanceID())
+			return true;
+		else
+			return false;
 	}
 
 	public void ExitPlanetGravity(Transform _exitPlanet) {
-		if(_isInPlanetGravity) {
+		//if(_isInPlanetGravity) {
+			//Debug.Log("EXIT: " + _currentPlanetInstanceID + " - " + _exitPlanet.GetInstanceID());
 			if(_currentPlanetInstanceID == _exitPlanet.GetInstanceID()) {
 				_currentPlanetInstanceID = 0;
 				_planetGravityDistance = 0;
 				_isInPlanetGravity = false;
 				_planet = null;
 			}
-		}
+		//}
 	}
 
 	public void DestroyShip() {

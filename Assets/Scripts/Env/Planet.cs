@@ -14,9 +14,12 @@ public class Planet : MonoBehaviour {
 
 	private Transform _rocket;
 
+	private bool _gotRocketInMyGravity = false;
+
 	void Start() {
 		_rocket = GameObject.FindGameObjectWithTag(Tags.Player).transform;
-		_gravityRadius = (transform.FindChild("PlanetGravity").GetComponent<SphereCollider>().radius);
+		//_gravityRadius = (transform.FindChild("PlanetGravity").GetComponent<SphereCollider>().radius);
+		_gravityRadius = GetComponent<SphereCollider>().radius + (GetComponent<SphereCollider>().radius*2);
 	}
 
 	void FixedUpdate() {
@@ -25,11 +28,27 @@ public class Planet : MonoBehaviour {
 		if(_rocket == null && GameControler.Instance.MyRocket != null)
 			_rocket = GameControler.Instance.MyRocket.transform;
 
-		if(_rocket) {
-			if(_gravityRadius > Vector3.Distance(transform.position, _rocket.position))
+		if(_rocket ) {
+			if(!_gotRocketInMyGravity && _gravityRadius > Vector3.Distance(transform.position, _rocket.position)) {
+				_gotRocketInMyGravity = true;
 				_rocket.GetComponent<RocketControl>().EnterPlanetGravity(transform);
-			else
-				_rocket.GetComponent<RocketControl>().ExitPlanetGravity(transform);
+			}
+
+			if(_gotRocketInMyGravity && _gravityRadius < Vector3.Distance(transform.position, _rocket.position)) {
+				_gotRocketInMyGravity = false;
+				//if(_rocket.GetComponent<RocketControl>().IsCurrentGravityPlanet(transform))
+					_rocket.GetComponent<RocketControl>().ExitPlanetGravity(transform);
+
+			}
+
+
+
+//			if(_gravityRadius > Vector3.Distance(transform.position, _rocket.position))
+//
+//			else {
+//				if(_rocket.GetComponent<RocketControl>().IsCurrentGravityPlanet(transform))
+//					_rocket.GetComponent<RocketControl>().ExitPlanetGravity(transform);
+//			}
 		}
 	}
 
