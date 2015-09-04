@@ -29,6 +29,9 @@ public class ShipEnergy : MonoBehaviour {
 	}
 
 	void Update () {
+		if(GameControler.Instance.IsLevelSuccess)
+			return;
+
 		if(!_isIncreasingEnergy ) {
 			_maxEnergyValue = _maxEnergyValue - 0.5f;
 			Vector2 _newSize = new Vector2(_maxEnergyValue, GetComponent<RectTransform>().sizeDelta.y);

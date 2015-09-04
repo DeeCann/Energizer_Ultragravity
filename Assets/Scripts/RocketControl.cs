@@ -34,6 +34,13 @@ public class RocketControl : MonoBehaviour {
 	}
 
 	void FixedUpdate () {
+		if(GameControler.Instance.IsLevelSuccess) {
+			StartCoroutine(EngineSoundOff());
+			_boostParticles.startSize = 0;
+			GetComponent<Rigidbody>().velocity = Vector3.Lerp(GetComponent<Rigidbody>().velocity, Vector3.zero, Time.deltaTime * 0.7f);
+			return;
+		}
+
 		if(_hasCollision || _hasWormhole)
 			return;
 
@@ -228,8 +235,8 @@ public class RocketControl : MonoBehaviour {
 	}
 
 	IEnumerator EngineSoundOn() {
-		while(_engineSound.volume < 0.02f) {
-			_engineSound.volume = Mathf.Lerp(_engineSound.volume, 0.02f, Time.deltaTime * 5);
+		while(_engineSound.volume < 0.2f) {
+			_engineSound.volume = Mathf.Lerp(_engineSound.volume, 0.2f, Time.deltaTime * 5);
 
 			if( !InputEventHandler._isStartTouchAction || _hasCollision)
 				yield break;
