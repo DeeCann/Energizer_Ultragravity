@@ -11,6 +11,12 @@ public class RocketControl : MonoBehaviour {
 	[SerializeField]
 	private AudioClip _destroySound;
 	private AudioSource _engineSound;
+	[SerializeField]
+	private AudioClip _powerUp;
+	[SerializeField]
+	private AudioClip _ping;
+
+	private GameObject _shield;
 
 	private Transform _planet;
 	private Wormhole _wormholeEnter;
@@ -31,6 +37,7 @@ public class RocketControl : MonoBehaviour {
 		_engineSound = GetComponent<AudioSource>();
 		_boostParticles.startSize = 0;
 		_boostParticles.Play();
+		_shield = transform.FindChild("Rocketshield").gameObject;
 	}
 
 	void FixedUpdate () {
@@ -44,6 +51,9 @@ public class RocketControl : MonoBehaviour {
 		if(_hasCollision || _hasWormhole)
 			return;
 
+		if(_hasPlanetCollision && GameControler.Instance.IsShieldActive)
+			return;
+
 		if(_isRocketHasPulsarVelocity) {
 			GetComponent<Rigidbody>().velocity = Vector3.Lerp(GetComponent<Rigidbody>().velocity, transform.forward * 3f, Time.deltaTime);
 
@@ -54,6 +64,8 @@ public class RocketControl : MonoBehaviour {
 			transform.position = new Vector3(0, Mathf.Clamp(transform.position.y, -17, 17), transform.position.z);
 			return;
 		} 
+
+
 
 		GetComponent<Rigidbody>().velocity = transform.forward * 3f;
 		_boostParticles.startSize = 0.2f;
@@ -93,13 +105,19 @@ public class RocketControl : MonoBehaviour {
 	}
 
 	void OnCollisionEnter(Collision other) {
-		if(other.collider.tag == Tags.Planet) {
+		if(other.collider.tag == Tags.Planet && !GameControler.Instance.IsShieldActive) {
 			DestroyShip();
+		}
+
+		if(GameControler.Instance.IsShieldActive) {
+			_hasPlanetCollision = true;
+			StartCoroutine(PLanetCollisionWithShield());
+			GetComponent<Rigidbody>().AddForce( (transform.forward  ) * -2, ForceMode.Impulse );
 		}
 	}
 
 	void OnTriggerEnter(Collider other) {
-		if(other.GetComponent<Collider>().tag == Tags.Asteroid) {
+		if(other.GetComponent<Collider>().tag == Tags.Asteroid && !GameControler.Instance.IsShieldActive) {
 			_hasCollision = true;
 			_boostParticles.startSize = 0;
 			StartCoroutine(EngineSoundOff());
@@ -115,7 +133,7 @@ public class RocketControl : MonoBehaviour {
 			StartCoroutine(WormholeEnter());
 		}
 
-		if(other.GetComponent<Collider>().tag == Tags.Blackhole) {
+		if(other.GetComponent<Collider>().tag == Tags.Blackhole && !GameControler.Instance.IsShieldActive) {
 			_blackHole = other.GetComponent<Blackhole>();
 			_boostParticles.Stop();
 			_hasBlackhole = true;
@@ -183,6 +201,12 @@ public class RocketControl : MonoBehaviour {
 		GameControler.Instance.ResetSpaceShip();
 	}
 
+	public void ActivateShield() {
+		_shield.SetActive(true);
+		_shield.GetComponent<AudioSource>().Play();
+		_shield.GetComponent<Animator>().SetBool("On", true);
+		StartCoroutine(ShieldOn());
+	}
 
 	IEnumerator CollisionVelocity() {
 
@@ -268,6 +292,35 @@ public class RocketControl : MonoBehaviour {
 		yield return new WaitForSeconds(2);
 
 		_isRocketHasPulsarVelocity = false;
+	}
+
+	IEnumerator PLanetCollisionWithShield() {
+		yield return new WaitForSeconds(1);
+
+		_hasPlanetCollision = false;
+	}
+
+	IEnumerator ShieldOn() {
+		GameControler.Instance.IsShieldActive = true;
+		yield return new WaitForSeconds(7);
+		
+		_shield.GetComponent<AudioSource>().clip = _ping;
+		_shield.GetComponent<AudioSource>().loop = true;
+		_shield.GetComponent<AudioSource>().Play();
+		
+		yield return new WaitForSeconds(3);
+		
+		_shield.GetComponent<AudioSource>().Stop();
+		_shield.GetComponent<AudioSource>().clip = _powerUp;
+		_shield.GetComponent<AudioSource>().loop = false;
+		
+		_shield.GetComponent<Animator>().SetBool("On", false);
+		_shield.GetComponent<Animator>().SetBool("Off", true);
+		
+		yield return new WaitForSeconds(0.5f);
+		_shield.SetActive(false);
+		GameControler.Instance.ClearCollectedEnergyPoints();
+		GameControler.Instance.IsShieldActive = false;
 	}
 
 }
