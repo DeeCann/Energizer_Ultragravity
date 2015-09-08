@@ -185,7 +185,7 @@ public class RocketControl : MonoBehaviour {
 
 	public void DestroyShip() {
 		_hasPlanetCollision = true;
-		_engineSound.volume = 0.5f;
+		_engineSound.volume = 0.25f;
 
 		GetComponent<AudioSource>().clip = _destroySound;
 		if(!GetComponent<AudioSource>().isPlaying)
@@ -259,8 +259,8 @@ public class RocketControl : MonoBehaviour {
 	}
 
 	IEnumerator EngineSoundOn() {
-		while(_engineSound.volume < 0.2f) {
-			_engineSound.volume = Mathf.Lerp(_engineSound.volume, 0.2f, Time.deltaTime * 5);
+		while(_engineSound.volume < 0.02f) {
+			_engineSound.volume = Mathf.Lerp(_engineSound.volume, 0.02f, Time.deltaTime * 5);
 
 			if( !InputEventHandler._isStartTouchAction || _hasCollision)
 				yield break;

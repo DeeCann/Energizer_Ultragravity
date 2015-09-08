@@ -3,7 +3,7 @@ using System.Collections;
 
 public class Blackhole : MonoBehaviour {
 	void OnTriggerEnter(Collider other) {
-		if(other.GetComponent<Collider>().tag == Tags.Player) {
+		if(other.GetComponent<Collider>().tag == Tags.Player && !GameControler.Instance.IsShieldActive) {
 			GetComponent<AudioSource>().Play();
 			StartCoroutine(FallOff());
 

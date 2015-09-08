@@ -8,6 +8,6 @@ public class TopMenuControler : MonoBehaviour {
 	}
 
 	public void Back() {
-		Application.LoadLevel(1);
+		GameControler.Instance.LoadLevel("Start");
 	}
 }
