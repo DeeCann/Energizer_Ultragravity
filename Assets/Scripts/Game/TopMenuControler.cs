@@ -7,11 +7,7 @@ public class TopMenuControler : MonoBehaviour {
 		GameControler.Instance.ReloadLevel();
 	}
 
-	public void Exit() {
-		Application.Quit();
-	}
-
 	public void Back() {
-		Application.LoadLevel(1);
+		GameControler.Instance.LoadLevel("Start");
 	}
 }
