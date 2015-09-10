@@ -27,6 +27,9 @@ public class RocketControl : MonoBehaviour {
 
 	private float _currentPlanetInstanceID;
 
+	[Range(0,2)]
+	public float _shipEnergyFactor = 1f;
+
 	void Start() {
 		_engineSound = GetComponent<AudioSource>();
 		_boostParticles.startSize = 0;
