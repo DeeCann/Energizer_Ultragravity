@@ -33,7 +33,7 @@ public class ShipEnergy : MonoBehaviour {
 			return;
 
 		if(!_isIncreasingEnergy ) {
-			_maxEnergyValue = _maxEnergyValue - 0.5f;
+			_maxEnergyValue = _maxEnergyValue - (GameControler.Instance.MyRocket.GetComponent<RocketControl>()._shipEnergyFactor * 2);
 			Vector2 _newSize = new Vector2(_maxEnergyValue, GetComponent<RectTransform>().sizeDelta.y);
 			GetComponent<RectTransform>().sizeDelta = _newSize;
 			//Debug.Log(_maxEnergyValue);
