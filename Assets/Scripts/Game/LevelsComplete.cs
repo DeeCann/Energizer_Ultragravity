@@ -23,6 +23,6 @@ public class LevelsComplete : MonoBehaviour {
 	}
 
 	public void UnlockPanel() {
-		GameControler.Instance.LoadLevel("UnlockAllLevels");
+		GameControler.Instance.LoadLevel("Start");
 	}
 }

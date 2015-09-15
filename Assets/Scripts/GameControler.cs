@@ -2,12 +2,16 @@
 using System.Collections;
 
 public class GameControler : MonoBehaviour {
+	public GameObject CodePanel;
+
 	private bool _levelSuccess = false;
 	private bool _levelStarted = false;
 	private bool _levelFailed = false;
 	
 	private int _spaceShipLeft = 0;
 	private int _points = 0;
+
+	private static int _packReloadCounter = 0;
 
 	private GameObject _spaceShip;
 
@@ -64,9 +68,17 @@ public class GameControler : MonoBehaviour {
 		if(Application.CanStreamedLevelBeLoaded(nextLevelName))
 			PlayerPrefs.SetInt(Application.loadedLevelName.Substring(0,6)+(System.Convert.ToInt16( Application.loadedLevelName.Substring(6))+1), 1);
 		
-		if(System.Convert.ToInt16( Application.loadedLevelName.Substring(6)) == 10)
+		if(System.Convert.ToInt16( Application.loadedLevelName.Substring(6)) == 10) {
+			PlayerPrefs.SetInt("LevelPacksUnlocked", 1);
+			PlayerPrefs.SetInt("Pack1_11", 1);
+			LevelsComplete.Instance.LevelsCompleted();	
+		} else if(System.Convert.ToInt16( Application.loadedLevelName.Substring(6)) == 25) {
+			PlayerPrefs.SetInt("Pack2_26", 1);
 			LevelsComplete.Instance.LevelsCompleted();
-		else
+		} else if(System.Convert.ToInt16( Application.loadedLevelName.Substring(6)) == 40) {
+			PlayerPrefs.SetInt("Pack3_41", 1);
+			LevelsComplete.Instance.LevelsCompleted();
+		} else
 			LoadNextLevel();
 	}
 	
@@ -75,7 +87,13 @@ public class GameControler : MonoBehaviour {
 		ReloadLevel();
 	}
 
+	public void CloseCodePanel() {
+		CodePanel.SetActive(false);
+		ReloadLevel(0);
+	}
+
 	public void ResetSpaceShip() {
+		Debug.Log(SpaceshipCounter);
 		StartCoroutine(ResetSpaceShipAfterTime());
 	}
 	
@@ -168,9 +186,15 @@ public class GameControler : MonoBehaviour {
 		InputEventHandler.ResetInput();
 		if(SpaceshipCounter > 1)
 			CreateNewSpaceShip();
-		else
-			LevelFailed();
-		
+		else {
+			if(!PlayerPrefs.HasKey("HasCode")) {
+				if(Application.loadedLevel == 12)
+					CodePanel.SetActive(true);
+				else
+					LevelFailed();
+			} else
+				LevelFailed();
+		}
 		
 	}
 }
