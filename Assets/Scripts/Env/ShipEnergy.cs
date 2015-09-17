@@ -24,8 +24,8 @@ public class ShipEnergy : MonoBehaviour {
 	}
 
 	void Awake() {
-		if(PlayerPrefs.HasKey("HasCode") && Application.loadedLevel == 12)
-			_shipEnergyFactor = 0.1f;
+		//if(PlayerPrefs.HasKey("HasCode") && Application.loadedLevel == 12)
+			//shipEnergyFactor = 0.1f;
 		//Debug.Log(_shipEnergyFactor);
 		_instance = this;
 		_maxEnergyValue = 620;
@@ -41,7 +41,7 @@ public class ShipEnergy : MonoBehaviour {
 			return;
 
 		if(!_isIncreasingEnergy ) {
-			_maxEnergyValue = _maxEnergyValue - (_shipEnergyFactor * 2);
+			_maxEnergyValue = _maxEnergyValue - (GameControler.Instance.MyRocket.GetComponent<RocketControl>()._shipEnergyFactor * 2);
 			Vector2 _newSize = new Vector2(_maxEnergyValue, GetComponent<RectTransform>().sizeDelta.y);
 			GetComponent<RectTransform>().sizeDelta = _newSize;
 

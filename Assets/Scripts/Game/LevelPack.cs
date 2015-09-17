@@ -15,9 +15,10 @@ public class LevelPack : MonoBehaviour {
 			GetComponent<Animator>().SetBool("FadeIn", true);
 
 			GetComponent<AudioSource>().Play();
-		} else {
-			GameControler.Instance.LoadLevel("UnlockAllLevels");
 		}
+//		else {
+//			GameControler.Instance.LoadLevel("UnlockAllLevels");
+//		}
 	}
 
 	public void ClosePanel() {
