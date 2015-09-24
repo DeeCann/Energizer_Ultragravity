@@ -101,8 +101,10 @@ public class GameControler : MonoBehaviour {
 	public void LoadNextLevel() {
 		//PlayerPrefs.DeleteKey("LastMoleculeSelected");
 		
-		if(Application.loadedLevel == 11)
+		if(Application.loadedLevel == 12) {
+			PlayerPrefs.SetInt("CanUnlock", 1);
 			FadeScreen.Instance.EndScene(null, 1);
+		}
 		else
 			FadeScreen.Instance.EndScene(null, Application.loadedLevel+1);
 	}
@@ -117,7 +119,7 @@ public class GameControler : MonoBehaviour {
 			PlayerPrefs.SetInt(Application.loadedLevelName.Substring(0,6)+(System.Convert.ToInt16( Application.loadedLevelName.Substring(6))+1), 1);
 		
 		if(System.Convert.ToInt16( Application.loadedLevelName.Substring(6)) == 10) {
-			PlayerPrefs.SetInt("LevelPacksUnlocked", 1);
+			//PlayerPrefs.SetInt("LevelPacksUnlocked", 1);
 			PlayerPrefs.SetInt("Pack1_11", 1);
 			LevelsComplete.Instance.LevelsCompleted();	
 		} else if(System.Convert.ToInt16( Application.loadedLevelName.Substring(6)) == 25) {
