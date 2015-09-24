@@ -1,16 +1,25 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class GameControler : MonoBehaviour {
+	public GameObject CodePanel;
+	
 	private bool _levelSuccess = false;
 	private bool _levelStarted = false;
 	private bool _levelFailed = false;
+	private bool _shieldIsActive = false;
 	
 	private int _spaceShipLeft = 0;
 	private int _points = 0;
-
+	
+	private static int _packReloadCounter = 0;
+	
 	private GameObject _spaceShip;
-
+	
+	
+	private List<ShieldEnergy> _myCollectedEnergy = new List<ShieldEnergy>();
+	
 	private static GameControler _instance = null;
 	public static GameControler Instance {
 		get {
@@ -21,10 +30,51 @@ public class GameControler : MonoBehaviour {
 		}
 	}
 	
+	
+	public class ShieldEnergy {
+		private float[] _energyTimes = new float[3];
+		private int _currentEnergyPointCounter = 0;
+		private int _maxTimePeriod = 3;
+		
+		public ShieldEnergy(float time) {
+			_energyTimes[_currentEnergyPointCounter] = time;
+			_currentEnergyPointCounter++;
+		}
+		
+		public float AddNewEnergyPoint {
+			set {
+				_energyTimes[_currentEnergyPointCounter] = value;
+				_currentEnergyPointCounter++;
+			}
+		}
+		
+		public bool CanAddNewEnergyPoint {
+			get {
+				if(_currentEnergyPointCounter >= 3)
+					return false;
+				else
+					return true;
+			}
+		}
+		
+		public bool CanActivateShield {
+			get {
+				if(_currentEnergyPointCounter == 3) {
+					if(_energyTimes[_energyTimes.Length-1] - _energyTimes[0] <= _maxTimePeriod)
+						return true;
+					else
+						return false;
+				} else 
+					return false;
+			}
+		}
+	}
+	
 	void Awake() {
 		_levelStarted = false;
+		_shieldIsActive = false;
 		_instance = this;
-
+		
 		_spaceShip = GameObject.FindGameObjectWithTag("Player");
 	}
 	
@@ -32,9 +82,11 @@ public class GameControler : MonoBehaviour {
 		FadeScreen.Instance.StartScene();
 		
 		StartCoroutine(StartLevel());
-
-//		if(SFXControler.Instance != null)
-//			SFXControler.Instance.VolumeUp();
+		
+		_myCollectedEnergy.Clear();
+		
+		//		if(SFXControler.Instance != null)
+		//			SFXControler.Instance.VolumeUp();
 	}
 	
 	public void ClearAllPrefs() {
@@ -47,9 +99,9 @@ public class GameControler : MonoBehaviour {
 	}
 	
 	public void LoadNextLevel() {
-		PlayerPrefs.DeleteKey("LastMoleculeSelected");
+		//PlayerPrefs.DeleteKey("LastMoleculeSelected");
 		
-		if(Application.loadedLevel == 12)
+		if(Application.loadedLevel == 11)
 			FadeScreen.Instance.EndScene(null, 1);
 		else
 			FadeScreen.Instance.EndScene(null, Application.loadedLevel+1);
@@ -64,9 +116,17 @@ public class GameControler : MonoBehaviour {
 		if(Application.CanStreamedLevelBeLoaded(nextLevelName))
 			PlayerPrefs.SetInt(Application.loadedLevelName.Substring(0,6)+(System.Convert.ToInt16( Application.loadedLevelName.Substring(6))+1), 1);
 		
-		if(System.Convert.ToInt16( Application.loadedLevelName.Substring(6)) == 10)
+		if(System.Convert.ToInt16( Application.loadedLevelName.Substring(6)) == 10) {
+			PlayerPrefs.SetInt("LevelPacksUnlocked", 1);
+			PlayerPrefs.SetInt("Pack1_11", 1);
+			LevelsComplete.Instance.LevelsCompleted();	
+		} else if(System.Convert.ToInt16( Application.loadedLevelName.Substring(6)) == 25) {
+			PlayerPrefs.SetInt("Pack2_26", 1);
 			LevelsComplete.Instance.LevelsCompleted();
-		else
+		} else if(System.Convert.ToInt16( Application.loadedLevelName.Substring(6)) == 40) {
+			PlayerPrefs.SetInt("Pack3_41", 1);
+			LevelsComplete.Instance.LevelsCompleted();
+		} else
 			LoadNextLevel();
 	}
 	
@@ -74,8 +134,14 @@ public class GameControler : MonoBehaviour {
 		IsLevelFailed = true;
 		ReloadLevel();
 	}
-
+	
+	public void CloseCodePanel() {
+		CodePanel.SetActive(false);
+		ReloadLevel(0);
+	}
+	
 	public void ResetSpaceShip() {
+		Debug.Log(SpaceshipCounter);
 		StartCoroutine(ResetSpaceShipAfterTime());
 	}
 	
@@ -94,7 +160,7 @@ public class GameControler : MonoBehaviour {
 			return _levelStarted;
 		}
 	}
-
+	
 	public bool IsLevelFailed {
 		get {
 			return _levelFailed;
@@ -102,6 +168,16 @@ public class GameControler : MonoBehaviour {
 		
 		set {
 			_levelFailed = true;
+		}
+	}
+	
+	public bool IsShieldActive {
+		get {
+			return _shieldIsActive;
+		}
+		
+		set {
+			_shieldIsActive = value;
 		}
 	}
 	
@@ -114,17 +190,37 @@ public class GameControler : MonoBehaviour {
 			return _spaceShipLeft;
 		}
 	}
-
+	
+	public void ClearCollectedEnergyPoints() {
+		_myCollectedEnergy.Clear();
+	}
+	
 	public int Points {
 		set {
 			_points += value;
+			
+			if(!IsShieldActive) {
+				foreach(ShieldEnergy _myEnergyPoints in  _myCollectedEnergy) {
+					if(_myEnergyPoints.CanAddNewEnergyPoint)
+						_myEnergyPoints.AddNewEnergyPoint = Time.time;
+				}
+				
+				_myCollectedEnergy.Add(new ShieldEnergy(Time.time));
+				
+				foreach(ShieldEnergy _myEnergyPoints in  _myCollectedEnergy) {
+					if(_myEnergyPoints.CanActivateShield) {
+						_spaceShip.GetComponent<RocketControl>().ActivateShield();
+						break;
+					}	
+				}
+			}
 		}
-
+		
 		get {
 			return _points;
 		}
 	}
-
+	
 	public Transform MyRocket {
 		get {
 			if(_spaceShip != null)
@@ -133,12 +229,12 @@ public class GameControler : MonoBehaviour {
 				return null;
 		}
 	}
-
+	
 	private void CreateNewSpaceShip() {
 		_spaceShip = (GameObject)Instantiate(Resources.Load("Rocket"), new Vector3(0,0,0), Quaternion.identity);
 		_spaceShip.GetComponent<Rigidbody>().velocity = Vector3.zero;	
 		SpaceshipCounter = --SpaceshipCounter;
-
+		
 		ShipEnergy.Instance.ResetEnergy();
 	}
 	
@@ -159,18 +255,26 @@ public class GameControler : MonoBehaviour {
 		//SFXControler.Instance.VolumeUp();
 		LoadNextLevel();
 	}
-
+	
 	
 	IEnumerator ResetSpaceShipAfterTime() {
 		
 		yield return new WaitForSeconds(2);
-
+		
 		InputEventHandler.ResetInput();
 		if(SpaceshipCounter > 1)
 			CreateNewSpaceShip();
-		else
-			LevelFailed();
-		
+		else {
+			if(!PlayerPrefs.HasKey("HasCode")) {
+				if(Application.loadedLevel == 12)
+					CodePanel.SetActive(true);
+				else
+					LevelFailed();
+			} else
+				LevelFailed();
+		}
 		
 	}
+	
+	
 }
