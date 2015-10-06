@@ -35,7 +35,9 @@ public class RocketControl : MonoBehaviour {
 	
 	[Range(0,2)]
 	public float _shipEnergyFactor = 1f;
-	
+
+	private float _pulsarVelocityFactor = 15;
+
 	void Start() {
 		_engineSound = GetComponent<AudioSource>();
 		_boostParticles.startSize = 0;
@@ -44,6 +46,7 @@ public class RocketControl : MonoBehaviour {
 	}
 	
 	void FixedUpdate () {
+		transform.position = new Vector3(0, Mathf.Clamp(transform.position.y, -17, 17), transform.position.z);
 		if(GameControler.Instance.IsLevelSuccess) {
 			StartCoroutine(EngineSoundOff());
 			_boostParticles.startSize = 0;
@@ -58,45 +61,50 @@ public class RocketControl : MonoBehaviour {
 			return;
 		
 		if(_isRocketHasPulsarVelocity) {
-			GetComponent<Rigidbody>().velocity = Vector3.Lerp(GetComponent<Rigidbody>().velocity, transform.forward * 3f, Time.deltaTime);
-			
+			if(_pulsarVelocityFactor < 3)
+				_pulsarVelocityFactor = 3;
+			else
+				_pulsarVelocityFactor -= 0.2f;
+			GetComponent<Rigidbody>().velocity = transform.forward * _pulsarVelocityFactor;
 			Vector3 pos = InputEventHandler._currentTouchPosition-transform.position;
 			var newRot = Quaternion.LookRotation(pos);
-			
-			transform.rotation = Quaternion.Lerp(transform.rotation, newRot, Time.deltaTime * 2);
+			_boostParticles.startSize = 0.2f;
+			transform.rotation = Quaternion.Lerp(transform.rotation, newRot, Time.deltaTime * 4);
 			transform.position = new Vector3(0, Mathf.Clamp(transform.position.y, -17, 17), transform.position.z);
 			return;
-		} 
-		
-		
-		
-		GetComponent<Rigidbody>().velocity = transform.forward * 3f;
+		} else
+			GetComponent<Rigidbody>().velocity = transform.forward * 3f;
+
 		_boostParticles.startSize = 0.2f;
 		
 		if(!_engineSound.isPlaying) {
 			_engineSound.Play();
 			StartCoroutine(EngineSoundOn());
 		}
-		
+
 		if(InputEventHandler._isStartTouchAction){
 			Vector3 pos = InputEventHandler._currentTouchPosition-transform.position;
 			var newRot = Quaternion.LookRotation(pos);
 			
 			if(_isInPlanetGravity) {
 				float _gravityPositionMultipier = (_planetGravityDistance - Vector3.Distance(transform.position, _planet.position))/_planet.GetComponent<Planet>().GravityMultipler * 0.001f;
-				
-				GetComponent<Rigidbody>().AddForce( (transform.position - _planet.transform.position) * -(_planetGravityDistance - Vector3.Distance(transform.position, _planet.position)) * _gravityPositionMultipier, ForceMode.VelocityChange);
-				GetComponent<Rigidbody>().velocity += transform.forward * -(_planetGravityDistance - Vector3.Distance(transform.position, _planet.position) * 20) * _gravityPositionMultipier;
+
+				if(!_isRocketHasPulsarVelocity) {
+					GetComponent<Rigidbody>().AddForce( (transform.position - _planet.transform.position) * -(_planetGravityDistance - Vector3.Distance(transform.position, _planet.position)) * _gravityPositionMultipier, ForceMode.VelocityChange);
+					GetComponent<Rigidbody>().velocity += transform.forward * -(_planetGravityDistance - Vector3.Distance(transform.position, _planet.position) * 20) * _gravityPositionMultipier;
+				}
 			}
 			
 			transform.rotation = Quaternion.Lerp(transform.rotation, newRot, Time.deltaTime * 2);
 		} else {
 			if(_isInPlanetGravity) {
 				float _gravityPositionMultipier = (_planetGravityDistance - Vector3.Distance(transform.position, _planet.position))/_planet.GetComponent<Planet>().GravityMultipler * 0.001f;
-				
-				GetComponent<Rigidbody>().AddForce( (transform.position - _planet.transform.position) * -(_planetGravityDistance - Vector3.Distance(transform.position, _planet.position)) * _gravityPositionMultipier, ForceMode.VelocityChange);
-				GetComponent<Rigidbody>().velocity += transform.forward * -(_planetGravityDistance - Vector3.Distance(transform.position, _planet.position) * 20) * _gravityPositionMultipier;
-				
+
+				if(!_isRocketHasPulsarVelocity) {
+					GetComponent<Rigidbody>().AddForce( (transform.position - _planet.transform.position) * -(_planetGravityDistance - Vector3.Distance(transform.position, _planet.position)) * _gravityPositionMultipier, ForceMode.VelocityChange);
+					GetComponent<Rigidbody>().velocity += transform.forward * -(_planetGravityDistance - Vector3.Distance(transform.position, _planet.position) * 20) * _gravityPositionMultipier;
+				}
+
 				Vector3 pos = _planet.transform.position-transform.position;
 				var newRot = Quaternion.LookRotation(pos);
 				
@@ -146,10 +154,10 @@ public class RocketControl : MonoBehaviour {
 		
 		if(other.GetComponent<Collider>().tag == Tags.Pulsar) {
 			if(!_isRocketHasPulsarVelocity) {
+				_pulsarVelocityFactor = 15;
 				_isRocketHasPulsarVelocity = true;
-				//GetComponent<Rigidbody>().AddForce( transform.forward * (10.5f + Vector3.Distance(transform.position, other.transform.position)), ForceMode.Impulse);
-				GetComponent<Rigidbody>().velocity = transform.forward * 10;
-				
+				GetComponent<Rigidbody>().velocity = transform.forward * _pulsarVelocityFactor;
+
 				StartCoroutine(DisablePulsarVelocity());
 			}
 		}
