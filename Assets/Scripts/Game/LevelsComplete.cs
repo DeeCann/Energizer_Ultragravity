@@ -2,7 +2,7 @@
 using System.Collections;
 
 public class LevelsComplete : MonoBehaviour {
-
+	
 	private static LevelsComplete _instance = null;
 	public static LevelsComplete Instance {
 		get {
@@ -21,8 +21,13 @@ public class LevelsComplete : MonoBehaviour {
 		GetComponent<Animator>().SetBool("Play", true);
 		GetComponent<AudioSource>().Play();
 	}
-
+	
 	public void UnlockPanel() {
-		GameControler.Instance.LoadLevel("UnlockAllLevels");
+		if(!PlayerPrefs.HasKey("LevelPacksUnlocked")) {
+			PlayerPrefs.SetInt("CanUnlock", 1);
+			GameControler.Instance.LoadLevel("UnlockAllLevels");
+		} else {
+			GameControler.Instance.LoadLevel("Start");
+		}
 	}
 }
