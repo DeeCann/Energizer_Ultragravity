@@ -14,6 +14,7 @@ public class Wormhole : MonoBehaviour {
 
 	void OnTriggerEnter(Collider other) {
 		if(_destination != null && other.GetComponent<Collider>().tag == Tags.Player ) {
+			GameControler.Instance.IsInWormHole = true;
 			if(!GetComponent<AudioSource>().isPlaying)
 				GetComponent<AudioSource>().Play();
 
@@ -30,5 +31,6 @@ public class Wormhole : MonoBehaviour {
 
 		GetComponent<AudioSource>().Stop();
 		GetComponent<AudioSource>().volume = 0.5f;
+		GameControler.Instance.IsInWormHole = false;
 	}
 }

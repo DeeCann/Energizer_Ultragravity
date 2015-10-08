@@ -35,9 +35,10 @@ public class RocketControl : MonoBehaviour {
 	
 	[Range(0,2)]
 	public float _shipEnergyFactor = 1f;
-	
+
 	private float _pulsarVelocityFactor = 15;
-	
+	private float _asteroidVectorVelocity = 3;
+
 	void Start() {
 		_engineSound = GetComponent<AudioSource>();
 		_boostParticles.startSize = 0;
@@ -53,9 +54,25 @@ public class RocketControl : MonoBehaviour {
 			GetComponent<Rigidbody>().velocity = Vector3.Lerp(GetComponent<Rigidbody>().velocity, Vector3.zero, Time.deltaTime * 0.7f);
 			return;
 		}
-		
-		if(_hasCollision || _hasWormhole)
+
+		if(_hasWormhole)
 			return;
+
+		if(_hasCollision) {
+			if(_asteroidVectorVelocity < 1f) {
+				_asteroidVectorVelocity = 3;
+				_hasCollision = false;
+			}
+			else
+				_asteroidVectorVelocity -= 0.01f;
+
+			GetComponent<Rigidbody>().velocity = transform.forward * _asteroidVectorVelocity;
+			Vector3 pos = InputEventHandler._currentTouchPosition-transform.position;
+			var newRot = Quaternion.LookRotation(pos);
+			transform.rotation = Quaternion.Lerp(transform.rotation, newRot, Time.deltaTime * 4);
+			transform.position = new Vector3(0, Mathf.Clamp(transform.position.y, -17, 17), transform.position.z);
+			return;
+		}
 		
 		if(_hasPlanetCollision && GameControler.Instance.IsShieldActive)
 			return;
@@ -74,21 +91,21 @@ public class RocketControl : MonoBehaviour {
 			return;
 		} else
 			GetComponent<Rigidbody>().velocity = transform.forward * 3f;
-		
+
 		_boostParticles.startSize = 0.2f;
 		
 		if(!_engineSound.isPlaying) {
 			_engineSound.Play();
 			StartCoroutine(EngineSoundOn());
 		}
-		
+
 		if(InputEventHandler._isStartTouchAction){
 			Vector3 pos = InputEventHandler._currentTouchPosition-transform.position;
 			var newRot = Quaternion.LookRotation(pos);
 			
 			if(_isInPlanetGravity) {
 				float _gravityPositionMultipier = (_planetGravityDistance - Vector3.Distance(transform.position, _planet.position))/_planet.GetComponent<Planet>().GravityMultipler * 0.001f;
-				
+
 				if(!_isRocketHasPulsarVelocity) {
 					GetComponent<Rigidbody>().AddForce( (transform.position - _planet.transform.position) * -(_planetGravityDistance - Vector3.Distance(transform.position, _planet.position)) * _gravityPositionMultipier, ForceMode.VelocityChange);
 					GetComponent<Rigidbody>().velocity += transform.forward * -(_planetGravityDistance - Vector3.Distance(transform.position, _planet.position) * 20) * _gravityPositionMultipier;
@@ -99,12 +116,12 @@ public class RocketControl : MonoBehaviour {
 		} else {
 			if(_isInPlanetGravity) {
 				float _gravityPositionMultipier = (_planetGravityDistance - Vector3.Distance(transform.position, _planet.position))/_planet.GetComponent<Planet>().GravityMultipler * 0.001f;
-				
+
 				if(!_isRocketHasPulsarVelocity) {
 					GetComponent<Rigidbody>().AddForce( (transform.position - _planet.transform.position) * -(_planetGravityDistance - Vector3.Distance(transform.position, _planet.position)) * _gravityPositionMultipier, ForceMode.VelocityChange);
 					GetComponent<Rigidbody>().velocity += transform.forward * -(_planetGravityDistance - Vector3.Distance(transform.position, _planet.position) * 20) * _gravityPositionMultipier;
 				}
-				
+
 				Vector3 pos = _planet.transform.position-transform.position;
 				var newRot = Quaternion.LookRotation(pos);
 				
@@ -130,9 +147,7 @@ public class RocketControl : MonoBehaviour {
 	void OnTriggerEnter(Collider other) {
 		if(other.GetComponent<Collider>().tag == Tags.Asteroid && !GameControler.Instance.IsShieldActive) {
 			_hasCollision = true;
-			_boostParticles.startSize = 0;
-			StartCoroutine(EngineSoundOff());
-			StartCoroutine(CollisionVelocity());
+
 		}
 		
 		if(other.GetComponent<Collider>().tag == Tags.WormholeEnter) {
@@ -157,7 +172,7 @@ public class RocketControl : MonoBehaviour {
 				_pulsarVelocityFactor = 15;
 				_isRocketHasPulsarVelocity = true;
 				GetComponent<Rigidbody>().velocity = transform.forward * _pulsarVelocityFactor;
-				
+
 				StartCoroutine(DisablePulsarVelocity());
 			}
 		}
@@ -219,15 +234,16 @@ public class RocketControl : MonoBehaviour {
 		StartCoroutine(ShieldOn());
 	}
 	
-	IEnumerator CollisionVelocity() {
-		
-		while(GetComponent<Rigidbody>().velocity.magnitude > 0.2f) {
-			GetComponent<Rigidbody>().velocity = Vector3.Lerp(GetComponent<Rigidbody>().velocity, Vector3.zero, Time.deltaTime * 0.7f);
-			yield return null;
-		}
-		
-		_hasCollision = false;
-	}
+//	IEnumerator CollisionVelocity() {
+//		Debug.Log(GetComponent<Rigidbody>().velocity.magnitude);
+//		while(GetComponent<Rigidbody>().velocity.magnitude > 0.3f) {
+//			//GetComponent<Rigidbody>().velocity = Vector3.Lerp(GetComponent<Rigidbody>().velocity, Vector3.one * 0.2f, Time.deltaTime * 0.02f);
+//			GetComponent<Rigidbody>().velocity -= transform.forward * 0.001f;
+//			yield return null;
+//		}
+//		
+//		_hasCollision = false;
+//	}
 	
 	IEnumerator WormholeEnter() {
 		while(transform.position.z < _wormholeExit.Destination.transform.position.z) {
