@@ -9,7 +9,8 @@ public class GameControler : MonoBehaviour {
 	private bool _levelStarted = false;
 	private bool _levelFailed = false;
 	private bool _shieldIsActive = false;
-	
+	private bool _isInWormHole = false;
+
 	private int _spaceShipLeft = 0;
 	private int _points = 0;
 	
@@ -229,6 +230,16 @@ public class GameControler : MonoBehaviour {
 				return _spaceShip.transform;
 			else
 				return null;
+		}
+	}
+
+	public bool IsInWormHole {
+		set {
+			_isInWormHole = value;
+		}
+
+		get {
+			return _isInWormHole;
 		}
 	}
 	

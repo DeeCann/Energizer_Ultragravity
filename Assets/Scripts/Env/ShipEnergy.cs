@@ -39,6 +39,9 @@ public class ShipEnergy : MonoBehaviour {
 			return; 
 		if(GameControler.Instance.IsLevelSuccess)
 			return;
+
+		if(GameControler.Instance.IsInWormHole)
+			return;
 		
 		if(!_isIncreasingEnergy ) {
 			_maxEnergyValue = _maxEnergyValue - (GameControler.Instance.MyRocket.GetComponent<RocketControl>()._shipEnergyFactor * 2);
@@ -62,7 +65,18 @@ public class ShipEnergy : MonoBehaviour {
 			if(_newEnergyLevel > 620)
 				_newEnergyLevel = 620;
 			
-			StartCoroutine(IncreaseEnergy());
+			StartCoroutine(IncreaseEnergy(2));
+		}
+	}
+
+	public float GetExtraEnergy {
+		set {
+			_isIncreasingEnergy = true;
+			_newEnergyLevel = _maxEnergyValue + value;
+			if(_newEnergyLevel > 620)
+				_newEnergyLevel = 620;
+			
+			StartCoroutine(IncreaseEnergy(200));
 		}
 	}
 	
@@ -74,9 +88,9 @@ public class ShipEnergy : MonoBehaviour {
 		_shipDestroied = false;
 	}
 	
-	IEnumerator IncreaseEnergy() {
+	IEnumerator IncreaseEnergy(float time) {
 		while(_maxEnergyValue < _newEnergyLevel) {
-			_maxEnergyValue += 2f;
+			_maxEnergyValue += time;
 			
 			Vector2 _newSize = new Vector2(_maxEnergyValue, GetComponent<RectTransform>().sizeDelta.y);
 			GetComponent<RectTransform>().sizeDelta = _newSize;

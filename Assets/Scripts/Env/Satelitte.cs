@@ -26,7 +26,8 @@ public class Satelitte : MonoBehaviour {
 			
 			foreach(MeshRenderer child in gameObject.GetComponentsInChildren<MeshRenderer>())
 				child.enabled = false;
-			
+
+			ShipEnergy.Instance.GetEnergy = -25;
 			Destroy(gameObject, 1);
 		}
 	}

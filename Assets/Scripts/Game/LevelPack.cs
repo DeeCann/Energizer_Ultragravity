@@ -16,7 +16,8 @@ public class LevelPack : MonoBehaviour {
 
 			GetComponent<AudioSource>().Play();
 		} else {
-			GameControler.Instance.LoadLevel("UnlockAllLevels");
+			LevelStandardPanel.FindChild("PremiumPacks").transform.FindChild("Info").gameObject.SetActive(true);
+			LevelStandardPanel.FindChild("PremiumPacks").transform.FindChild("Info").GetComponent<AudioSource>().Play();
 		}
 	}
 
